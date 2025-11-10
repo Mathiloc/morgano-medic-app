@@ -1,0 +1,1344 @@
+/* --- ESTILOS DEL HEADER (SerumsHeader.jsx) --- */
+.serums-header {
+  background-color: rgba(19, 22, 28, 0.8); /* bg-mm-fondo-premium/80 */
+  backdrop-filter: blur(10px); /* backdrop-blur-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  border-bottom: 1px solid rgb(55 65 81 / 50%); /* border-gray-800 */
+}
+
+.serums-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem; /* py-4 */
+  padding-bottom: 1rem;
+  /* La clase .container ya la definimos en GlobalStyles.css */
+}
+
+.serums-logo-img {
+  height: 2rem; /* h-8 */
+  width: auto;
+}
+
+/* --- Navegación de Escritorio --- */
+.serums-nav-desktop {
+  display: none; /* Oculto por defecto (móvil) */
+}
+
+.serums-nav-desktop a {
+  color: #E5E7EB; /* text-gray-300 */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.serums-nav-desktop a:hover {
+  color: #48E5C2; /* hover:text-mm-verde-menta */
+}
+
+.serums-nav-desktop-actions {
+  display: none; /* Oculto por defecto (móvil) */
+}
+
+/* --- Botón de Menú Móvil --- */
+.serums-nav-mobile-toggle {
+  display: block; /* Visible por defecto (móvil) */
+}
+
+.serums-nav-mobile-toggle button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.icon-menu {
+  width: 1.5rem; /* h-6 w-6 */
+  height: 1.5rem;
+}
+
+/* --- Menú Móvil Desplegable --- */
+.serums-nav-mobile-menu {
+  display: block; /* lg:hidden */
+  border-top: 1px solid #374151; /* border-gray-800 */
+  padding: 0.5rem 1rem 1rem; /* px-4 pt-2 pb-4 */
+}
+
+.serums-nav-mobile-menu nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* gap-4 */
+}
+
+.serums-nav-mobile-menu a {
+  color: #E5E7EB; /* text-gray-300 */
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0; /* py-2 */
+}
+
+.serums-nav-mobile-menu a:hover {
+  color: #48E5C2; /* hover:text-mm-verde-menta */
+}
+
+.serums-nav-mobile-menu .nav-button {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem; /* mt-2 */
+}
+
+
+/* --- RESPONSIVIDAD (Media Query 'lg') --- */
+@media (min-width: 1024px) {
+  .serums-logo-img {
+    height: 2.5rem; /* md:h-10 */
+  }
+
+  /* Ocultamos lo móvil */
+  .serums-nav-mobile-toggle {
+    display: none;
+  }
+  .serums-nav-mobile-menu {
+    display: none;
+  }
+
+  /* Mostramos lo de escritorio */
+  .serums-nav-desktop {
+    display: flex; /* lg:flex */
+    align-items: center;
+    gap: 2rem; /* gap-8 */
+  }
+  .serums-nav-desktop-actions {
+    display: flex; /* lg:flex */
+    align-items: center;
+    gap: 1rem; /* gap-4 */
+  }
+}
+
+/* --- ESTILOS DE SERUMS MAIN CONTENT --- */
+
+.serums-main-content {
+  /* Dejamos espacio para el Header fijo */
+  padding-top: 68px; /* Ajusta este valor si es necesario */
+}
+
+/* Fondo de gradiente radial de la sección Hero */
+.hero-bg {
+  background-color: transparent;
+  background-image: radial-gradient(circle at top right, rgba(32, 128, 124, 0.2), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(72, 229, 194, 0.15), transparent 50%);
+}
+
+.serums-hero-section {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 6rem; /* pt-32 (ajustado por el padding del main) */
+  padding-bottom: 5rem; /* pb-20 */
+  padding-left: 1.5rem; /* px-6 */
+  padding-right: 1.5rem;
+  min-height: 100vh; /* min-h-screen */
+  box-sizing: border-box;
+}
+
+/* --- Banner de Descuento --- */
+.discount-banner {
+  margin-bottom: 3rem; /* mb-12 */
+}
+
+.discount-banner-inner {
+  background-image: linear-gradient(120deg, #20807C, #48E5C2); /* gradient-deep-dive */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  max-width: 56rem; /* max-w-4xl */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.5rem; /* gap-y-3 gap-x-6 */
+  text-align: center;
+  color: white;
+}
+
+.discount-price {
+  font-weight: 700; /* font-bold */
+  font-size: 1.125rem; /* text-lg */
+}
+
+.price-old {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.price-separator {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* --- Componente CountdownTimer --- */
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+  font-family: 'monospace'; /* font-mono */
+  font-size: 0.875rem; /* text-base */
+}
+
+.countdown-label {
+  font-weight: 600; /* font-semibold */
+  margin-right: 0.5rem; /* mr-2 */
+  opacity: 0.8;
+  display: none; /* Oculto en móvil, como en el original */
+}
+
+.countdown-box {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem; /* p-2 */
+  border-radius: 0.375rem; /* rounded-md */
+  font-size: 0.875rem; /* text-sm */
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: 0.75rem; /* text-xs */
+  margin-left: 2px;
+}
+
+.countdown-separator {
+  font-weight: 700; /* font-bold */
+}
+
+.countdown-expired {
+  text-align: center;
+  font-weight: 700;
+  color: white;
+  font-size: 1.125rem; /* text-lg */
+}
+
+/* --- Título Hero y CTA --- */
+.hero-content {
+  /* Estilos del div contenedor */
+}
+
+.hero-title-serums {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 700; /* font-bold */
+  color: white;
+  max-width: 56rem; /* max-w-4xl */
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.2; /* leading-tight */
+}
+
+.hero-subtitle-serums {
+  margin-top: 1.5rem; /* mt-6 */
+  font-size: 1.125rem; /* text-lg */
+  color: #E5E7EB; /* text-gray-300 */
+  max-width: 42rem; /* max-w-2xl */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-cta-button {
+  margin-top: 2rem; /* mt-8 */
+  display: inline-block;
+  background-image: linear-gradient(to right, #48E5C2, #00B4D8); /* gradient-tech-flow */
+  color: white;
+  font-weight: 700; /* font-bold */
+  font-size: 1.125rem; /* text-lg */
+  padding: 1rem 2.5rem; /* py-4 px-10 */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-xl */
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.hero-cta-button:hover {
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+
+/* --- ESTILOS DE PRUEBA SOCIAL (Logos U) --- */
+
+.social-proof-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+}
+
+.social-proof-container {
+  text-align: center;
+}
+
+.social-proof-title {
+  color: #6B7280; /* text-gray-500 */
+  font-weight: 600; /* font-semibold */
+  text-transform: uppercase;
+  letter-spacing: 0.05em; /* tracking-wider */
+  margin: 0;
+}
+
+.social-proof-grid {
+  margin-top: 2rem; /* mt-8 */
+  display: flex;
+  flex-wrap: wrap; /* flex-wrap */
+  justify-content: center; /* justify-center */
+  align-items: center; /* items-center */
+  gap: 1.5rem 2rem; /* gap-y-6 gap-x-8 */
+  opacity: 0.7; /* opacity-70 */
+  filter: grayscale(100%); /* grayscale */
+}
+
+.social-proof-grid img {
+  height: 2.5rem; /* h-10 */
+  /* Algunos logos son más altos, les damos altura fija */
+  max-height: 3rem; /* h-12 */
+  width: auto;
+  object-fit: contain;
+}
+
+
+/* --- ESTILOS DE SECCIÓN GENÉRICOS --- */
+.section-title-wrapper {
+  text-align: center;
+  max-width: 56rem; /* max-w-3xl */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.section-subtitle {
+  margin-top: 1rem; /* mt-4 */
+  font-size: 1.125rem; /* text-lg */
+  color: #E5E7EB; /* text-gray-300 */
+}
+
+/* --- ESTILOS DE LA SECCIÓN FRUSTRACIÓN --- */
+
+.frustration-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+  background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
+}
+
+.frustration-grid {
+  margin-top: 3rem; /* mt-12 */
+  display: grid;
+  grid-template-columns: 1fr; /* 1 columna en móvil */
+  gap: 2rem; /* gap-8 */
+}
+
+.frustration-card {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 2rem; /* p-8 */
+  border: 1px solid #374151; /* border-gray-800 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.frustration-card-icon-wrapper {
+  width: 4rem; /* w-16 */
+  height: 4rem; /* h-16 */
+  border-radius: 9999px; /* rounded-full */
+  background-image: linear-gradient(120deg, #20807C, #48E5C2); /* gradient-deep-dive */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem; /* mb-6 */
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+.frustration-card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0; /* mb-2 */
+}
+
+.frustration-card-description {
+  color: #9CA3AF; /* text-gray-400 */
+  margin: 0;
+  line-height: 1.6;
+}
+
+
+/* --- ESTILOS DE LA SECCIÓN MÉTODO --- */
+
+.method-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+}
+
+.method-grid {
+  margin-top: 3rem; /* mt-12 */
+  display: grid;
+  grid-template-columns: 1fr; /* 1 columna en móvil */
+  gap: 2rem; /* gap-8 */
+}
+
+.method-card {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 2rem; /* p-8 */
+  border: 1px solid #374151; /* border-gray-800 */
+}
+
+.method-card-icon-wrapper {
+  width: 3rem; /* w-12 */
+  height: 3rem; /* h-12 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-image: linear-gradient(120deg, #20807C, #48E5C2); /* gradient-deep-dive */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.method-card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0; /* mb-2 */
+}
+
+.method-card-description {
+  color: #9CA3AF; /* text-gray-400 */
+  margin: 0;
+  line-height: 1.6;
+}
+
+
+/* --- ESTILOS DE LA SECCIÓN PROGRAMAS --- */
+
+.programs-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+}
+
+.programs-container {
+  /* Estilos del contenedor si son necesarios */
+}
+
+.programs-main-card-wrapper {
+  margin-top: 3rem; /* mt-12 */
+  max-width: 80rem; /* max-w-5xl */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.program-card-main {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 2rem; /* p-8 */
+  border: 1px solid #374151; /* border-gray-800 */
+  /* Aplicamos la transición de las 'program-card' */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Efecto hover (de tu CSS original) */
+.program-card-main:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(72, 229, 194, 0.1);
+  border-color: #48E5C2;
+}
+
+.program-card-main-content {
+  display: flex;
+  flex-direction: column; /* Apilado en móvil */
+  align-items: center;
+  gap: 2rem; /* gap-8 */
+}
+
+.program-card-main-icon {
+  width: 6rem; /* w-24 */
+  height: 6rem; /* h-24 */
+  border-radius: 9999px; /* rounded-full */
+  background-image: linear-gradient(120deg, #20807C, #48E5C2); /* gradient-deep-dive */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.program-card-main-text {
+  text-align: center; /* Centrado en móvil */
+  flex-grow: 1; /* Ocupa el espacio disponible */
+}
+
+.program-card-main-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.program-card-main-description {
+  color: #9CA3AF; /* text-gray-400 */
+  margin-top: 0.5rem; /* mt-2 */
+}
+
+.program-card-main-button {
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+/* --- Sección de Especialidades --- */
+.specialty-section {
+  margin-top: 2.5rem; /* mt-10 */
+  padding-top: 2rem; /* pt-8 */
+  border-top: 1px solid #374151; /* border-t border-gray-800 */
+  
+  /* Truco para el fondo oscuro interior */
+  background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
+  margin: 2.5rem -2rem -2rem -2rem; /* -m-8 (compensa el padding) */
+  padding: 2rem; /* p-8 */
+  border-bottom-left-radius: 1rem; /* rounded-b-2xl */
+  border-bottom-right-radius: 1rem;
+}
+
+.specialty-section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  margin: 0 0 2rem 0; /* mb-8 */
+}
+
+.specialty-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* grid-cols-2 */
+  gap: 1rem; /* gap-4 */
+}
+
+.specialty-card {
+  background-color: #13161C; /* bg-mm-fondo-premium */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1rem; /* p-4 */
+  text-align: center;
+  border: 1px solid #374151; /* border-gray-800 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.specialty-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(72, 229, 194, 0.1);
+  border-color: #48E5C2;
+}
+
+.specialty-card img {
+  height: 5rem; /* h-20 */
+  width: auto;
+  margin-bottom: 0.5rem; /* mb-2 */
+  object-fit: contain;
+}
+
+.specialty-card-icon-placeholder {
+  height: 5rem; /* h-20 */
+  width: auto;
+  margin-bottom: 0.5rem; /* mb-2 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4B5563; /* text-gray-600 */
+}
+
+.specialty-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem; /* text-lg */
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  margin-top: auto; /* mt-auto */
+}
+
+
+/* --- RESPONSIVIDAD (Media Queries) --- */
+
+/* 'sm' (640px) */
+@media (min-width: 640px) {
+  .discount-banner-inner {
+    flex-direction: row; /* sm:flex-row */
+  }
+  .specialty-grid {
+    grid-template-columns: repeat(3, 1fr); /* sm:grid-cols-3 */
+  }
+}
+
+/* 'md' (768px) */
+@media (min-width: 768px) {
+  .countdown-label {
+    display: inline; /* md:inline */
+  }
+  
+  .hero-title-serums {
+    font-size: 3.75rem; /* md:text-6xl */
+  }
+  
+  .hero-subtitle-serums {
+    font-size: 1.25rem; /* md:text-xl */
+  }
+
+  .section-title {
+    font-size: 2.25rem; /* md:text-4xl */
+  }
+  
+  .frustration-section {
+    padding-top: 6rem; /* md:py-24 */
+    padding-bottom: 6rem;
+  }
+
+  .frustration-grid {
+    grid-template-columns: repeat(3, 1fr); /* md:grid-cols-3 */
+  }
+
+  .method-section {
+    padding-top: 6rem; /* md:py-24 */
+    padding-bottom: 6rem;
+  }
+
+  .method-grid {
+    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+  }
+
+  .programs-section {
+    padding-top: 6rem; /* md:py-24 */
+    padding-bottom: 6rem;
+  }
+  
+  .program-card-main-content {
+    flex-direction: row; /* md:flex-row */
+    text-align: left; /* md:text-left */
+  }
+
+  .specialty-grid {
+    grid-template-columns: repeat(4, 1fr); /* md:grid-cols-4 */
+  }
+}
+
+/* 'lg' (1024px) */
+@media (min-width: 1024px) {
+  .hero-title-serums {
+    font-size: 4.5rem; /* lg:text-7xl */
+  }
+  .method-grid {
+    grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
+  }
+  .specialty-grid {
+    grid-template-columns: repeat(6, 1fr); /* lg:grid-cols-6 */
+  }
+}
+
+/* --- ESTILOS DE LA SECCIÓN DOCTORES --- */
+
+.doctors-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+}
+
+/* Contenedor del componente Swiper */
+.doctors-carousel-wrapper {
+  margin-top: 3rem; /* mt-12 */
+  position: relative;
+  /* Damos un poco de espacio lateral para que se vean las flechas */
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* ¡Importante! Asegura que los slides sean visibles */
+.doctors-swiper .swiper-slide {
+  height: auto; /* Permite que el contenido defina la altura */
+  padding-bottom: 0.5rem; /* Espacio para la sombra */
+}
+
+/* Tarjeta individual del Doctor */
+.doctor-card {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
+  padding: 1.5rem; /* p-6 */
+  text-align: center;
+  border: 1px solid #374151; /* border-gray-800 */
+  height: 100%; /* Rellena la altura del slide */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; /* Asegura que el padding no rompa la altura */
+  /* Transición de tu HTML original */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: scale(1.05);
+  border-color: #48E5C2;
+  box-shadow: 0 8px 25px rgba(72, 229, 194, 0.25);
+}
+
+.doctor-card-image {
+  width: 8rem; /* w-32 */
+  height: 8rem; /* h-32 */
+  border-radius: 9999px; /* rounded-full */
+  margin-left: auto;
+  margin-right: auto;
+  border: 4px solid #4B5563; /* border-4 border-gray-700 */
+  object-fit: cover; /* object-cover */
+}
+
+.doctor-card-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  color: white;
+  margin: 1rem 0 0.25rem 0; /* mt-4 */
+}
+
+.doctor-card-specialty {
+  color: #48E5C2; /* text-mm-verde-menta */
+  font-weight: 600; /* font-semibold */
+  margin: 0;
+}
+
+.doctor-card-description {
+  color: #9CA3AF; /* text-gray-400 */
+  margin-top: 0.5rem; /* mt-2 */
+  font-size: 0.875rem; /* text-sm */
+  flex-grow: 1; /* Ocupa el espacio restante */
+  line-height: 1.5;
+}
+
+
+/* --- ESTILOS DE LAS FLECHAS DE SWIPER --- */
+/* Estos estilos son de tu HTML original */
+.doctors-swiper .swiper-button-next,
+.doctors-swiper .swiper-button-prev {
+  color: #48E5C2 !important;
+  background-color: rgba(29, 39, 52, 0.7);
+  border-radius: 9999px;
+  width: 44px !important;
+  height: 44px !important;
+  backdrop-filter: blur(5px);
+  border: 1px solid #2a3b4f;
+  transition: background-color 0.3s;
+}
+
+/* Posiciona las flechas fuera del contenido */
+.doctors-swiper .swiper-button-prev {
+  left: -10px;
+}
+.doctors-swiper .swiper-button-next {
+  right: -10px;
+}
+
+.doctors-swiper .swiper-button-next:hover,
+.doctors-swiper .swiper-button-prev:hover {
+  background-color: rgba(32, 128, 124, 0.5);
+}
+
+.doctors-swiper .swiper-button-next:after,
+.doctors-swiper .swiper-button-prev:after {
+  font-size: 20px !important;
+  font-weight: bold;
+}
+
+/* Oculta las flechas en móviles */
+@media (max-width: 639px) {
+  .doctors-swiper .swiper-button-next,
+  .doctors-swiper .swiper-button-prev {
+    display: none;
+  }
+}
+
+/* --- ESTILOS DE LA SECCIÓN TESTIMONIOS --- */
+
+.testimonials-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+}
+
+.testimonials-carousel-wrapper {
+  margin-top: 3rem; /* mt-12 */
+  position: relative;
+  /* Espacio para las flechas */
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.testimonials-swiper .swiper-slide {
+  height: auto; /* Permite que el contenido defina la altura */
+  padding-bottom: 0.5rem; /* Espacio para la sombra */
+}
+
+/* Tarjeta individual de Testimonio */
+.testimonial-card {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 2rem; /* p-8 */
+  border: 1px solid #374151; /* border-gray-800 */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* Transición de tu HTML original */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: scale(1.05);
+  border-color: #48E5C2;
+  box-shadow: 0 8px 25px rgba(72, 229, 194, 0.25);
+}
+
+.testimonial-card-text {
+  color: #E5E7EB; /* text-gray-300 */
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  margin: 0;
+  font-style: italic;
+}
+
+.testimonial-card-author-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem; /* mt-6 */
+  padding-top: 1.5rem; /* pt-6 */
+  border-top: 1px solid #4B5563; /* border-gray-700 */
+}
+
+.testimonial-card-image {
+  width: 3rem; /* w-12 */
+  height: 3rem; /* h-12 */
+  border-radius: 9999px; /* rounded-full */
+  margin-right: 1rem; /* mr-4 */
+}
+
+.testimonial-card-author-info {
+  text-align: left;
+}
+
+.testimonial-card-name {
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.testimonial-card-school {
+  font-size: 0.875rem; /* text-sm */
+  color: #9CA3AF; /* text-gray-500 */
+  margin: 0;
+}
+
+
+/* --- ESTILOS DE LAS FLECHAS DE SWIPER (Testimonios) --- */
+/* Usamos las mismas clases que los doctores */
+.testimonials-swiper .swiper-button-next,
+.testimonials-swiper .swiper-button-prev {
+  color: #48E5C2 !important;
+  background-color: rgba(29, 39, 52, 0.7);
+  border-radius: 9999px;
+  width: 44px !important;
+  height: 44px !important;
+  backdrop-filter: blur(5px);
+  border: 1px solid #2a3b4f;
+  transition: background-color 0.3s;
+}
+
+.testimonials-swiper .swiper-button-prev {
+  left: -10px;
+}
+.testimonials-swiper .swiper-button-next {
+  right: -10px;
+}
+
+.testimonials-swiper .swiper-button-next:hover,
+.testimonials-swiper .swiper-button-prev:hover {
+  background-color: rgba(32, 128, 124, 0.5);
+}
+
+.testimonials-swiper .swiper-button-next:after,
+.testimonials-swiper .swiper-button-prev:after {
+  font-size: 20px !important;
+  font-weight: bold;
+}
+
+/* Oculta las flechas en móviles */
+@media (max-width: 639px) {
+  .testimonials-swiper .swiper-button-next,
+  .testimonials-swiper .swiper-button-prev {
+    display: none;
+  }
+}
+
+/* --- ESTILOS DE LA SECCIÓN PRECIOS --- */
+
+.pricing-section {
+  padding: 4rem 1.5rem; /* py-16 px-6 */
+  background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
+}
+
+.pricing-grid {
+  margin-top: 3rem; /* mt-12 */
+  display: grid;
+  grid-template-columns: 1fr; /* 1 columna en móvil */
+  gap: 3rem; /* gap-8 */
+  align-items: center; /* Alinea verticalmente las tarjetas */
+  max-width: 24rem; /* max-w-sm */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pricing-card {
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
+  padding: 2rem; /* p-8 */
+  border: 1px solid #374151; /* border-gray-800 */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Tarjeta Premium Destacada --- */
+.pricing-card.premium {
+  background-color: white;
+  color: #1D2734; /* text-mm-gris-oscuro */
+   /* lg:scale-105 */
+  position: relative;
+}
+
+.pricing-card-badge {
+  position: absolute;
+  top: -1rem; /* -top-4 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: linear-gradient(to right, #48E5C2, #00B4D8); /* gradient-tech-flow */
+  color: white;
+  font-weight: 700; /* font-bold */
+  padding: 0.25rem 1rem; /* py-1 px-4 */
+  border-radius: 9999px; /* rounded-full */
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* --- Contenido de las Tarjetas --- */
+.pricing-card-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* text-2xl */
+  color: white;
+}
+
+.pricing-card.premium .pricing-card-title {
+  font-size: 1.875rem; /* text-3xl */
+  color: #111827; /* color de texto oscuro */
+}
+
+.pricing-card-subtitle {
+  color: #9CA3AF; /* text-gray-400 */
+  margin-top: 0.5rem; /* mt-2 */
+  flex-grow: 1; /* Ocupa espacio para alinear botones */
+}
+
+.pricing-card.premium .pricing-card-subtitle {
+  color: #6B7280; /* text-gray-500 */
+}
+
+.pricing-card-price {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.25rem; /* text-4xl */
+  margin: 1.5rem 0; /* my-6 */
+  color: white;
+}
+
+.pricing-card-price-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.75rem; /* gap-3 */
+  margin-top: 1.5rem; /* mt-6 */
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+.pricing-card-price-old {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  color: #9CA3AF; /* text-gray-400 */
+  text-decoration: line-through;
+  font-family: 'Poppins', sans-serif;
+}
+
+.pricing-card-price.premium {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 800; /* font-extrabold */
+  color: #1D2734; /* text-mm-gris-oscuro */
+  margin: 0;
+}
+
+.pricing-card-promo-text {
+  color: #4B5563; /* text-gray-600 */
+  font-weight: 600; /* font-semibold */
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+
+/* --- Lista de Características --- */
+.pricing-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0; /* mb-8 */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space-y-4 */
+  color: #E5E7EB; /* text-gray-300 */
+}
+
+.pricing-card.premium .pricing-card-features {
+  color: #4B5563; /* text-gray-600 */
+}
+
+.pricing-card-features li {
+  display: flex;
+  align-items: flex-start;
+}
+
+.pricing-card-features li.feature-highlight {
+  font-weight: 700;
+  color: #48E5C2; /* text-mm-verde-menta */
+}
+
+.pricing-card-features svg {
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
+  color: #48E5C2; /* text-mm-verde-menta */
+  margin-right: 0.5rem; /* mr-2 */
+  flex-shrink: 0;
+  /* Estilos SVG */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --- Botones de Tarjetas --- */
+.pricing-card-button-outline {
+  width: 100%;
+  margin-top: auto; /* Pega el botón al final */
+  text-align: center;
+  font-weight: 700;
+  color: #48E5C2; /* text-mm-verde-menta */
+  background-color: transparent;
+  border: 2px solid #48E5C2;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.pricing-card-button-outline:hover {
+  background-color: #48E5C2;
+  color: #1D2734; /* hover:text-mm-gris-oscuro */
+}
+
+.pricing-card-button-primary {
+  width: 100%;
+  display: block;
+  margin-top: 2rem; /* mt-8 */
+  text-align: center;
+  font-weight: 700;
+  color: white;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-image: linear-gradient(to right, #48E5C2, #00B4D8);
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); /* shadow-lg */
+  text-decoration: none;
+}
+
+.pricing-card-button-primary:hover {
+  transform: scale(1.05);
+}
+
+/* --- RE-ESTILO DEL COUNTDOWN para la tarjeta Premium --- */
+.pricing-countdown-wrapper {
+  margin-top: 2rem; /* mt-8 */
+  padding-top: 1.5rem; /* pt-6 */
+  border-top: 1px solid #E5E7EB; /* border-gray-200 */
+}
+
+.pricing-countdown-label {
+  color: #6B7280; /* text-gray-500 */
+  font-weight: 600; /* font-semibold */
+  text-align: center;
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+/* Apunta al .countdown-timer DENTRO del wrapper de precios */
+.pricing-countdown-wrapper .countdown-timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem; /* space-x-2 */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #1D2734; /* text-mm-gris-oscuro */
+}
+
+/* Oculta la etiqueta "La oferta termina en:" del contador genérico */
+.pricing-countdown-wrapper .countdown-label {
+  display: none;
+}
+
+/* Cambia el fondo de la caja */
+.pricing-countdown-wrapper .countdown-box {
+  background: #F3F4F6; /* bg-gray-100 */
+  border: none;
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  font-size: 1.5rem; /* text-2xl */
+}
+
+/* Estilo del texto "DÍAS", "HORAS", etc. */
+.pricing-countdown-wrapper .countdown-unit {
+  font-size: 0.75rem; /* text-xs */
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; /* font-normal */
+  color: #6B7280; /* text-gray-500 */
+  margin-left: 0;
+  margin-top: 0.5rem; /* mt-2 */
+  
+  /* Truco para ponerlo debajo */
+  display: block;
+  line-height: 1;
+}
+
+.pricing-countdown-wrapper .countdown-separator {
+  color: #9CA3AF; /* text-gray-400 */
+  font-size: 1.5rem;
+  padding-top: 0.5rem; /* Alinea con los números */
+}
+
+/* --- Tarjeta Plan Gratuito --- */
+.free-plan-card {
+  margin-top: 5rem; /* mt-20 */
+  max-width: 32rem; /* max-w-lg */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem; /* p-6 */
+  border-radius: 0.75rem; /* rounded-xl */
+  background-color: #1D2734; /* bg-mm-gris-oscuro */
+  border: 1px solid #374151; /* border-gray-800 */
+  text-align: center;
+}
+
+.free-plan-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0; /* mb-2 */
+}
+
+.free-plan-subtitle {
+  color: #9CA3AF; /* text-gray-400 */
+  margin: 0 0 1rem 0; /* mb-4 */
+}
+
+.free-plan-button {
+  display: inline-block;
+  color: #48E5C2; /* text-mm-verde-menta */
+  border: 1px solid #48E5C2;
+  font-weight: 700; /* font-bold */
+  padding: 0.5rem 1.5rem; /* py-2 px-6 */
+  border-radius: 0.5rem; /* rounded-lg */
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.free-plan-button:hover {
+  background-color: #48E5C2;
+  color: #1D2734; /* hover:text-mm-gris-oscuro */
+}
+
+
+/* --- RESPONSIVIDAD (Media Queries) --- */
+
+/* 'lg' (1024px) */
+@media (min-width: 1024px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
+    max-width: none; /* lg:max-w-none */
+  }
+
+  .pricing-countdown-wrapper .countdown-box {
+    font-size: 2.25rem; /* sm:text-4xl */
+  }
+}
+
+
+/* === ESTILOS PARA FAQs === */
+.faq-section {
+  background-color: #13161C; /* mm-fondo-premium */
+  padding: 5rem 0;
+}
+.faq-container {
+  max-width: 800px; /* Limitamos el ancho para legibilidad */
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espacio entre preguntas */
+}
+.faq-item {
+  background-color: #1D2734; /* mm-gris-oscuro */
+  border: 1px solid #2a3b4f; /* Borde sutil */
+  border-radius: 0.5rem;
+  overflow: hidden; /* Clave para la animación de max-height */
+}
+.faq-question-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  padding: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #D1D5DB; /* text-gray-300 */
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: background-color 0.2s;
+}
+.faq-question-button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.faq-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #9CA3AF; /* text-gray-500 */
+  transition: transform 0.3s ease;
+}
+.faq-icon.open {
+  transform: rotate(45deg);
+}
+.faq-answer-content {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+.faq-answer-content p {
+  padding: 0 1rem 1rem 1rem;
+  color: #9CA3AF; /* text-gray-400 */
+  line-height: 1.6;
+}
+
+/* === ESTILOS PARA EL FOOTER === */
+.footer-section {
+  background-color: transparent; /* Fondo del body */
+  border-top: 1px solid #2a3b4f; /* Borde sutil */
+  color: white;
+  padding: 4rem 1.5rem;
+  margin-top: 4rem;
+}
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+.footer-col-main {
+  grid-column: span 2 / span 2; /* Ocupa todo el ancho en móviles */
+}
+.footer-logo {
+  height: 2rem;
+  width: auto;
+  margin-bottom: 1rem;
+}
+.footer-description {
+  font-size: 0.875rem;
+  color: #9CA3AF; /* text-gray-400 */
+}
+.footer-social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.footer-social-links a {
+  color: #9CA3AF; /* text-gray-400 */
+  transition: color 0.2s;
+}
+.footer-social-links a:hover {
+  color: #48E5C2; /* mm-verde-menta */
+}
+.footer-col-links {
+  margin-top: 1rem;
+}
+.footer-col-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+.footer-col-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.footer-col-links li a {
+  color: #9CA3AF; /* text-gray-400 */
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col-links li a:hover {
+  color: #48E5C2; /* mm-verde-menta */
+}
+.footer-copyright {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #2a3b4f;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #9CA3AF; /* text-gray-500 */
+}
+
+/* --- Media query para Footer en Desktop --- */
+@media (min-width: 768px) {
+  .footer-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .footer-col-main {
+    grid-column: span 1 / span 1;
+  }
+  .footer-col-links {
+    margin-top: 0;
+  }
+}

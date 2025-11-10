@@ -1,0 +1,191 @@
+/* src/styles/Dashboard.css */
+:root {
+  --verde-principal: #20807C;
+  --menta-tech: #48E5C2;
+  --texto-principal: #1D2734;
+  --texto-secundario: #6c757d;
+  --fondo-principal: #F4F7F5;
+  --superficie-color: #FFFFFF;
+  --borde-color: #EAEBEB;
+  --blanco: #FFFFFF;
+  --error: #FF6B6B;
+  --success: #28a745;
+  --acento-ambar: #FFAA00;
+  --acento-violeta: #9333EA;
+  --gradiente-tech-flow: linear-gradient(90deg, #48E5C2 0%, #00B4D8 100%);
+  --gradiente-deep-dive: linear-gradient(90deg, #20807C 0%, #48E5C2 100%);
+  --font-titulos: 'Poppins', sans-serif;
+  --font-cuerpo: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Este 'body' es específico para el dashboard/login.
+  Usaremos 'scoped' CSS para que no entre en conflicto con el
+  'body' de tu landing page.
+*/
+body.dashboard-active {
+  font-family: var(--font-cuerpo);
+  color: var(--texto-principal);
+  background-color: var(--fondo-principal);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.morganoboard-hidden { display: none !important; }
+
+/* AUTH STYLES */
+.morganoboard-auth-wrapper {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background-color: transparent;
+}
+.morganoboard-card {
+  background-color: var(--blanco);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(29, 39, 52, 0.08);
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+.morganoboard-welcome-panel {
+  background: var(--gradiente-tech-flow);
+  color: var(--blanco);
+  flex: 1;
+  min-width: 280px;
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.morganoboard-welcome-panel img.mascot { max-width: 150px; margin-bottom: 1.5rem; }
+.morganoboard-welcome-panel h2 { font-family: var(--font-titulos); font-size: 1.8rem; margin: 0 0 0.5rem 0; color: var(--blanco); }
+.morganoboard-welcome-panel p { font-size: 1rem; opacity: 0.9; line-height: 1.6; }
+.morganoboard-form-panel { flex: 1.5; min-width: 320px; padding: 2rem 3rem; display: grid; place-items: center; }
+.morganoboard-form-panel .form-header { text-align: center; margin-bottom: 2rem; }
+.morganoboard-form-panel .form-header img { width: 180px; margin-bottom: 1rem; }
+#google-signin-btn-container { min-height: 40px; display: flex; justify-content: center; }
+.morganoboard-message { margin-top: 1rem; font-size: 0.9rem; min-height: 20px; font-weight: 500; text-align: center; }
+.morganoboard-message.error { color: var(--error); }
+.progress-bar-container { width: 100%; background-color: var(--fondo-principal); border-radius: 5px; margin-bottom: 1.5rem; overflow: hidden; }
+.progress-bar { width: 50%; height: 10px; background: var(--gradiente-tech-flow); border-radius: 5px; transition: width 0.4s ease-in-out; }
+.form-step { display: none; }
+.form-step.active { display: block; animation: fadeIn 0.5s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.form-navigation-buttons { display: flex; justify-content: space-between; margin-top: 1.5rem; gap: 1rem; }
+.morganoboard-form-group { margin-bottom: 1.25rem; text-align: left; }
+.morganoboard-form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+/* Apuntamos a los inputs/selects dentro del wrapper de auth */
+.morganoboard-auth-wrapper input, .morganoboard-auth-wrapper select { width: 100%; padding: 12px 15px; border: 1px solid var(--borde-color); border-radius: 8px; box-sizing: border-box; font-family: var(--font-cuerpo); font-size: 1rem; }
+.morganoboard-auth-wrapper select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2320807C%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 15px top 50%;
+  background-size: .65em auto;
+}
+
+
+
+/* BUTTONS */
+.morganoboard-btn {
+  padding: 14px;
+  background: var(--gradiente-tech-flow);
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-cuerpo);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  text-decoration: none;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.morganoboard-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.morganoboard-btn:disabled { background: var(--borde-color); color: var(--texto-secundario); cursor: not-allowed; transform: none; box-shadow: none; }
+.morganoboard-btn.btn-full-width { width: 100%; }
+.morganoboard-btn.btn-secondary { background: var(--fondo-principal); color: var(--texto-principal); border: 1px solid var(--borde-color); }
+
+/* MAIN LAYOUT */
+.page-wrapper { min-height: 100vh; padding-left: 250px; transition: padding-left 0.3s ease; }
+.sidebar { width: 250px; background-color: var(--superficie-color); border-right: 1px solid var(--borde-color); display: flex; flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; gap: 3rem; position: fixed; height: 100%; z-index: 100; left: 0; top: 0; transition: width 0.3s ease; }
+.sidebar-logo { width: 180px; height: auto; margin-bottom: 2rem; }
+.sidebar-nav { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-btn { color: var(--texto-secundario); transition: all 0.2s ease; width: 100%; display: flex; align-items: center; justify-content: flex-start; gap: 1rem; padding: 0.8rem 1rem; border-radius: 8px; position: relative; text-decoration: none; font-weight: 500; font-size: 0.95rem; background: none; border: none; cursor: pointer; text-align: left; }
+.sidebar-btn:hover { color: var(--verde-principal); background-color: var(--fondo-principal); }
+.sidebar-btn.active { color: var(--verde-principal); background-color: #e8f2f2; font-weight: 600; }
+.sidebar-btn.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 24px; background-color: var(--verde-principal); border-radius: 0 4px 4px 0; }
+.main-content { padding: 2.5rem 3rem; }
+
+/* ... (Todos los demás estilos del dashboard: HEADER, CARDS, TIMELINE, SIMULACROS, WIDGETS, RANKING, MODAL, SKELETONS, MOBILE, AFILIADOS, etc.) ... */
+/* Pega el resto de los estilos de tu archivo HTML aquí */
+
+/* Responsive para el Login */
+@media (max-width: 768px) {
+  .morganoboard-welcome-panel { display: none; }
+}
+
+/* (Pega el resto de los media queries aquí) */
+
+
+
+
+/* src/styles/Dashboard.css */
+
+/* ... (pega esto al final del archivo) ... */
+
+/* --- Estilos para Login con Email --- */
+
+/* El separador "O" */
+.auth-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--texto-secundario);
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 300px; /* Ancho del botón de Google */
+  margin-left: auto;
+  margin-right: auto;
+}
+.auth-separator::before,
+.auth-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--borde-color);
+}
+.auth-separator:not(:empty)::before {
+  margin-right: 1em;
+}
+.auth-separator:not(:empty)::after {
+  margin-left: 1em;
+}
+
+/* El contenedor del formulario de email */
+#email-login-form {
+  width: 100%;
+  max-width: 300px; /* Coincide con el ancho del botón de Google */
+  margin: 0 auto;
+}
+
+/* NOTA: No necesitas estilos nuevos para los 'input'
+  porque la regla '.morganoboard-auth-wrapper input' 
+  que ya tenías en Dashboard.css se aplicará
+  automáticamente a estos nuevos campos.
+*/
