@@ -81,8 +81,9 @@ export function LoginPage() {
     script.onload = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: "160669319361-pqtig8ihoi8is22oeegmis1qjdt3q0t8.apps.googleusercontent.com",
-          callback: handleSignIn
+         // 👇 ESTE ES EL NUEVO ID QUE DEBES PEGAR 👇
+         client_id: "784691835938-lf31f66018k82oaerp2aup5re50gtbfk.apps.googleusercontent.com",
+         callback: handleSignIn
         });
         if (googleButtonContainerRef.current) {
           window.google.accounts.id.renderButton(
