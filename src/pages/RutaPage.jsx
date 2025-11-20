@@ -1,70 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../Context/AuthContext.jsx';
-// import feather from 'feather-icons'; // ELIMINADO
+import React from 'react';
+// 1. Importamos el hook que creamos (asegúrate de haber creado el archivo en hooks/)
+import { useLearningPath } from '../hooks/useLearningPath';
+// 2. Importamos iconos modernos de Lucide (reemplaza a feather)
+import { Layers, ArrowLeft, CheckCircle, PlayCircle, Lock } from 'lucide-react';
 import '../styles/Dashboard.css';
 
-// --- COMPONENTE DE SKELETON (ESQUELETO) ---
+// --- COMPONENTE DE SKELETON (Lo mantenemos igual, se ve bien) ---
 const AreaSkeleton = ({ count = 3 }) => (
-  <div>
+  <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
     {Array.from({ length: count }, (_, i) => (
-      <div key={i} className="skeleton-card" aria-hidden="true">
-        <div
-          className="skeleton skeleton-icon"
-          style={{ borderRadius: '12px' }}
-        ></div>
+      <div key={i} className="skeleton-card" style={{ background: 'var(--superficie-color)' }}>
+        <div className="skeleton skeleton-icon" style={{ borderRadius: '12px', width:'48px', height:'48px' }}></div>
         <div className="skeleton-text-group">
-          <div className="skeleton skeleton-text"></div>
-          <div className="skeleton skeleton-text short"></div>
+          <div className="skeleton skeleton-text" style={{ width: '60%' }}></div>
+          <div className="skeleton skeleton-text short" style={{ width: '40%' }}></div>
         </div>
       </div>
     ))}
   </div>
 );
 
-// --- DATOS DE SIMULACIÓN ---
-const fakeLearningPathData = {
-  areas: [
-    { nombre: 'Cardiología', descripcion: 'Domina el corazón y el sistema vascular.' },
-    { nombre: 'Neumología', descripcion: 'Todo sobre pulmones y el sistema respiratorio.' },
-    { nombre: 'Endocrinología', descripcion: 'Hormonas y metabolismo.' },
-  ],
-  cursosPorArea: {
-    Cardiología: [
-      { cursoId: 'cardio1', titulo: 'Lección 1: Anatomía Cardíaca', descripcion: 'Un repaso fundamental.', status: 'completed' },
-      { cursoId: 'cardio2', titulo: 'Lección 2: Interpretación de ECG Básico', descripcion: 'Aprende a leer un ECG.', status: 'unlocked' },
-      { cursoId: 'cardio3', titulo: 'Lección 3: Farmacología Cardiovascular (PRO)', descripcion: 'Requiere plan superior.', status: 'locked' },
-    ],
-    Neumología: [
-      { cursoId: 'neumo1', titulo: 'Lección 1: Fisiología Pulmonar', descripcion: 'Intercambio gaseoso.', status: 'completed' },
-    ],
-    Endocrinología: [],
-  },
-};
-// --- FIN DE DATOS DE SIMULACIÓN ---
-
 // --- COMPONENTE DE ITEM DE TIMELINE ---
 const TimelineItem = ({ lesson }) => {
   const { status, titulo, descripcion, cursoId } = lesson;
+  
+  // Lógica de iconos y botones actualizada a React + Lucide
   let icon, button;
 
   switch (status) {
     case 'completed':
-      icon = <i data-feather="check-circle"></i>;
-      button = ( <a href={`/cursosmg/?cursoId=${cursoId}`} className="morganoboard-btn btn-secondary"> Repasar Clase </a> );
+      icon = <CheckCircle size={20} />;
+      button = (
+        <button 
+          onClick={() => window.location.href = `/cursosmg/?cursoId=${cursoId}`} 
+          className="morganoboard-btn btn-secondary"
+        >
+          Repasar Clase
+        </button>
+      );
       break;
     case 'unlocked':
-      icon = <i data-feather="play-circle"></i>;
-      button = ( <a href={`/cursosmg/?cursoId=${cursoId}`} className="morganoboard-btn"> Empezar Lección </a> );
+      icon = <PlayCircle size={20} />;
+      button = (
+        <button 
+          onClick={() => window.location.href = `/cursosmg/?cursoId=${cursoId}`} 
+          className="morganoboard-btn"
+        >
+          Empezar Lección
+        </button>
+      );
       break;
-    default:
-      icon = <i data-feather="lock"></i>;
-      button = ( <a href="/precios" className="morganoboard-btn" style={{ background: 'var(--acento-violeta)' }} > Mejorar Plan </a> );
+    default: // locked
+      icon = <Lock size={20} />;
+      button = (
+        <button 
+          onClick={() => window.open('https://morganomedic.com/serums/#precios', '_blank')}
+          className="morganoboard-btn" 
+          style={{ background: 'var(--acento-violeta)' }}
+        >
+          Mejorar Plan
+        </button>
+      );
   }
 
   return (
     <div className={`timeline-item timeline-item--${status}`}>
       <div className="timeline-connector"></div>
-      <div className="timeline-icon">{icon}</div>
+      <div className="timeline-icon">
+        {/* Renderizamos el icono directamente */}
+        {icon}
+      </div>
       <div className="timeline-content">
         <h3 className="timeline-content__title">{titulo}</h3>
         <p className="timeline-content__description">{descripcion}</p>
@@ -74,28 +79,41 @@ const TimelineItem = ({ lesson }) => {
   );
 };
 
-// --- COMPONENTE DE VISTA DE TIMELINE ---
+// --- VISTA DE LÍNEA DE TIEMPO ---
 const LearningPathTimelineView = ({ areaTitle, lessons, onBack }) => (
   <div id="ruta-learning-path">
     <button className="back-button" onClick={onBack}>
-      <i data-feather="arrow-left"></i> Volver a Áreas
+      <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver a Áreas
     </button>
-    <h1>{areaTitle}</h1>
-    {lessons.map((lesson) => (
-      <TimelineItem key={lesson.cursoId} lesson={lesson} />
-    ))}
+    <h1 style={{ fontFamily: 'var(--font-titulos)', marginBottom: '2rem' }}>{areaTitle}</h1>
+    
+    <div className="timeline-container">
+        {lessons.length > 0 ? (
+            lessons.map((lesson, index) => (
+                <TimelineItem key={lesson.cursoId || index} lesson={lesson} />
+            ))
+        ) : (
+            <p>No hay clases disponibles en esta área.</p>
+        )}
+    </div>
   </div>
 );
 
-// --- COMPONENTE DE VISTA DE ÁREAS ---
+// --- VISTA DE SELECCIÓN DE ÁREAS ---
 const AreaSelectionView = ({ areas, cursosPorArea, onSelectArea }) => (
-  <div id="ruta-area-selection">
+  <div id="ruta-area-selection" className="dashboard-grid">
     {areas.map((area) => {
+      // Verificamos si el área tiene cursos antes de mostrarla
       if (cursosPorArea[area.nombre] && cursosPorArea[area.nombre].length > 0) {
         return (
-          <div key={area.nombre} className="area-card" onClick={() => onSelectArea(area.nombre)} style={{ cursor: 'pointer' }}>
+          <div 
+            key={area.nombre} 
+            className="area-card" 
+            onClick={() => onSelectArea(area.nombre)} 
+            style={{ cursor: 'pointer' }}
+          >
             <div className="area-card-icon">
-              <i data-feather="layers"></i>
+              <Layers size={24} />
             </div>
             <div className="area-card-info">
               <h3>{area.nombre}</h3>
@@ -110,57 +128,53 @@ const AreaSelectionView = ({ areas, cursosPorArea, onSelectArea }) => (
 );
 
 // --- PÁGINA PRINCIPAL DE LA RUTA ---
-export function RutaPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [learningPathData, setLearningPathData] = useState(null);
-  const [selectedAreaName, setSelectedAreaName] = useState(null);
-  const { currentUser } = useAuth();
+export default function RutaPage() {
+  // 3. Usamos el hook personalizado para toda la lógica y estado
+  // Esto reemplaza tu useState manual, useEffect y setTimeout
+  const { 
+    loading, 
+    error, 
+    areas, 
+    courses, 
+    selectedArea, 
+    selectArea, 
+    goBack 
+  } = useLearningPath();
 
-  // Efecto para recargar los íconos de Feather cuando cambia la vista
-  useEffect(() => {
-    // CORREGIDO: Usamos window.feather
-    if (!isLoading && window.feather) {
-      window.feather.replace();
-    }
-  }, [isLoading, selectedAreaName]); // Se activa al cargar y al cambiar de vista
+  // Renderizado condicional basado en el estado del Hook
 
-  // Efecto para cargar los datos (simulados)
-  useEffect(() => {
-    const loadData = async () => {
-      if (!currentUser) return;
-      setIsLoading(true);
-      setTimeout(() => {
-        setLearningPathData(fakeLearningPathData);
-        setIsLoading(false);
-      }, 1000);
-    };
-    loadData();
-  }, [currentUser]);
-
-  if (isLoading) {
-    return <AreaSkeleton count={3} />;
+  if (loading) {
+    return <AreaSkeleton count={4} />;
   }
 
-  if (!learningPathData) {
-    return <p style={{ color: 'var(--error)' }}>No se pudieron cargar los datos.</p>;
-  }
-
-  if (!selectedAreaName) {
+  if (error) {
     return (
-      <AreaSelectionView
-        areas={learningPathData.areas}
-        cursosPorArea={learningPathData.cursosPorArea}
-        onSelectArea={setSelectedAreaName}
+        <div className="dashboard-widget" style={{ textAlign: 'center', color: 'var(--error)' }}>
+            <h3>Error de conexión</h3>
+            <p>{error}</p>
+            <button className="morganoboard-btn" onClick={() => window.location.reload()}>Recargar</button>
+        </div>
+    );
+  }
+
+  // Si hay un área seleccionada, mostramos el Timeline
+  if (selectedArea) {
+    const lessons = courses[selectedArea] || [];
+    return (
+      <LearningPathTimelineView
+        areaTitle={selectedArea}
+        lessons={lessons}
+        onBack={goBack}
       />
     );
   }
 
-  const lessons = learningPathData.cursosPorArea[selectedAreaName] || [];
+  // Si no, mostramos la selección de áreas
   return (
-    <LearningPathTimelineView
-      areaTitle={selectedAreaName}
-      lessons={lessons}
-      onBack={() => setSelectedAreaName(null)}
+    <AreaSelectionView
+      areas={areas}
+      cursosPorArea={courses}
+      onSelectArea={selectArea}
     />
   );
 }

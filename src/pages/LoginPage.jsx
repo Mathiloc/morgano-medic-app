@@ -1,62 +1,59 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useAuth } from '../Context/AuthContext.jsx';
+// Asegúrate de que la ruta coincida con tu carpeta real (context vs Context)
+import { useAuth } from '../Context/AuthContext.jsx'; 
 import { useNavigate, Navigate } from 'react-router-dom';
 import { apiCall } from '../utils/api.js';
 import { RegisterForm } from '../components/RegisterForm.jsx';
-import '../styles/Dashboard.css'; // Esto es correcto (para los estilos del card)
+// 👇 IMPORTAMOS LOS NUEVOS HOOKS (CEREBROS)
+import { useLogin } from '../hooks/useLogin';     
+import { useAffiliate } from '../hooks/useAffiliate'; 
+import '../styles/Dashboard.css';
 
 const logoVerde = "https://i.ibb.co/3YWQn17F/Logo-Verde.png";
 
+// ✅ SEGURIDAD: Leemos el ID desde el archivo .env
+// Si no existe, evitará que la app se rompa pero mostrará un error en consola
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 export function LoginPage() {
-  const { login, currentUser } = useAuth();
+  const { login: authLogin, currentUser } = useAuth();
   const navigate = useNavigate();
   
+  // 👇 USAMOS LOS HOOKS PARA LIMPIAR LA VISTA
+  // useLogin: Maneja la carga, errores y validación con el backend simulado
+  const { login: loginAPI, isLoading, error: loginError } = useLogin();
+  // useAffiliate: Maneja la lectura de cookies y cálculo de descuentos
+  const { affiliateOffer } = useAffiliate(); 
+
   const [authMessage, setAuthMessage] = useState('');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [googleUserData, setGoogleUserData] = useState(null);
-  const [affiliateOffer, setAffiliateOffer] = useState(null);
   
-  // Estados para el formulario de email
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const googleButtonContainerRef = useRef(null);
 
-  // --- Lógica de Afiliados ---
+  // Sincronizar errores del hook de login con el mensaje de la UI
   useEffect(() => {
-    // (Tu lógica de getCookie y apiCall para afiliados va aquí)
-    const getCookie = (name) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    };
-    const affiliateId = getCookie('morgano_ref_id');
-    if (affiliateId) {
-      apiCall('getAffiliateOfferDetails', { affiliateId }).then(response => {
-        if (response.success && response.data) {
-          setAffiliateOffer({ 
-            id: affiliateId, 
-            discount: response.data.discountPercentage, 
-            name: response.data.affiliateName 
-          });
-        }
-      });
-    }
-  }, []);
+    if (loginError) setAuthMessage(loginError);
+  }, [loginError]);
 
-  // --- Callback de Google GSI ---
+  // Callback de Google (Simplificado gracias al hook useAffiliate)
   const handleSignIn = useCallback(async (googleResponse) => {
-    setAuthMessage('Verificando...');
+    setAuthMessage('Verificando con Google...');
+    
+    // Ya tenemos los datos de afiliado limpios gracias al hook
     const payload = { 
       credential: googleResponse.credential,
-      affiliateId: affiliateOffer ? affiliateOffer.id : null,
-      discountApplied: affiliateOffer ? affiliateOffer.discount : null
+      affiliateId: affiliateOffer?.id || null,
+      discountApplied: affiliateOffer?.discount || null
     };
+    
     const backendResponse = await apiCall('handleGoogleSignIn', payload);
     
     if (backendResponse.success) {
       if (backendResponse.userExists) {
-        login(backendResponse.userData);
+        authLogin(backendResponse.userData);
         navigate('/board/inicio');
       } else {
         setGoogleUserData(backendResponse.googleData);
@@ -65,13 +62,16 @@ export function LoginPage() {
     } else {
       setAuthMessage(backendResponse.message || 'Error al iniciar sesión.');
     }
-  }, [login, navigate, affiliateOffer]);
+  }, [authLogin, navigate, affiliateOffer]);
 
-  // --- Carga del Script de Google ---
+  // Carga del Script de Google (Ahora usa la variable segura)
   useEffect(() => {
-    // ❌ EL 'useEffect' QUE AÑADÍA 'dashboard-body' SE HA QUITADO
-    
-    // Carga el script de Google GSI
+    if (!GOOGLE_CLIENT_ID) {
+      console.error("Falta VITE_GOOGLE_CLIENT_ID en el archivo .env");
+      setAuthMessage("Error de configuración: Falta Google Client ID");
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
@@ -81,9 +81,8 @@ export function LoginPage() {
     script.onload = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-         // 👇 ESTE ES EL NUEVO ID QUE DEBES PEGAR 👇
-         client_id: "784691835938-lf31f66018k82oaerp2aup5re50gtbfk.apps.googleusercontent.com",
-         callback: handleSignIn
+          client_id: GOOGLE_CLIENT_ID, // 👈 Usamos la variable de entorno
+          callback: handleSignIn
         });
         if (googleButtonContainerRef.current) {
           window.google.accounts.id.renderButton(
@@ -94,34 +93,28 @@ export function LoginPage() {
       }
     };
     return () => {
-      // Limpia solo el script
       document.body.removeChild(script);
     };
-  }, [handleSignIn]); // Dependencia del callback
+  }, [handleSignIn]);
 
-  
-  // --- Handler para el login con email ---
+  // Handler para el login con email (REFACTORIZADO Y LIMPIO)
   const handleEmailLogin = async (e) => {
     e.preventDefault();
-    setAuthMessage('Verificando...');
+    setAuthMessage(''); 
     
-    // Simulación de API
-    setTimeout(() => {
-      if (email === "test@morgano.com" && password === "1234") {
-        login({ email: email, nombres: "Usuario Test", programa: "SERUMS 2026 - I" });
-        navigate('/board/inicio');
-      } else {
-        setAuthMessage('Email o contraseña incorrectos. (Prueba test@morgano.com / 1234)');
-      }
-    }, 1000);
+    // Llamamos al hook. Toda la lógica de setTimeout y validación está oculta.
+    const result = await loginAPI(email, password);
+    
+    if (result.success) {
+      authLogin(result.user);
+      // La navegación ya la maneja el hook, o el AuthContext si así lo configuraste.
+    }
   };
   
-  if (currentUser) {
-    return <Navigate to="/board/inicio" replace />;
-  }
+  if (currentUser) return <Navigate to="/board/inicio" replace />;
 
   return (
-    <div className="morganoboard-auth-wrapper"> {/* 👈 Este div ahora es transparente */}
+    <div className="morganoboard-auth-wrapper">
       <div className="morganoboard-card">
         
         {/* Panel de Bienvenida */}
@@ -130,7 +123,7 @@ export function LoginPage() {
           {affiliateOffer ? (
             <>
               <h2>¡Gracias a {affiliateOffer.name}!</h2>
-              <p>Has sido invitado/a y tienes un <strong>{affiliateOffer.discount}% de descuento</strong>. ¡Inicia sesión para reclamarlo!</p>
+              <p>Has sido invitado/a y tienes un <strong>{affiliateOffer.discount}% de descuento</strong>.</p>
             </>
           ) : (
             <>
@@ -140,66 +133,54 @@ export function LoginPage() {
           )}
         </div>
 
-        {/* Panel de Formulario (con Login o Registro) */}
+        {/* Panel de Formulario */}
         <div className="morganoboard-form-panel">
-          
           {!showRegisterForm ? (
-            // --- VISTA DE LOGIN ---
             <div id="morganoboard-login-view" style={{ width: '100%' }}>
               <div className="form-header">
                 <img src={logoVerde} alt="Logo MorganoMedic" />
               </div>
               
-              {/* 1. Botón de Google */}
+              {/* Botón de Google */}
               <div id="google-signin-btn-container" ref={googleButtonContainerRef}></div>
               
-              {/* 2. Separador "O" */}
               <div className="auth-separator">O</div>
               
-              {/* 3. Formulario de Email */}
+              {/* Formulario Email */}
               <form id="email-login-form" onSubmit={handleEmailLogin}>
                 <div className="morganoboard-form-group">
                   <label htmlFor="mb-login-email">Email</label>
                   <input 
-                    type="email" 
-                    name="email" 
-                    id="mb-login-email" 
-                    required 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="email" name="email" id="mb-login-email" required 
+                    value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
                   />
                 </div>
                 <div className="morganoboard-form-group">
                   <label htmlFor="mb-login-pass">Contraseña</label>
                   <input 
-                    type="password" 
-                    name="password" 
-                    id="mb-login-pass" 
-                    required 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    type="password" name="password" id="mb-login-pass" required 
+                    value={password} onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                   />
                 </div>
-                <button type="submit" className="morganoboard-btn btn-full-width" style={{marginTop: '0.5rem'}}>
-                  Ingresar
+                
+                <button 
+                  type="submit" 
+                  className="morganoboard-btn btn-full-width" 
+                  style={{marginTop: '0.5rem'}}
+                  disabled={isLoading} // Deshabilitado mientras carga
+                >
+                  {isLoading ? 'Verificando...' : 'Ingresar'}
                 </button>
               </form>
               
-              <div id="auth-message" className="morganoboard-message error">
+              <div id="auth-message" className={`morganoboard-message ${authMessage ? 'error' : ''}`}>
                 {authMessage}
               </div>
             </div>
-
           ) : (
-            
-            // --- VISTA DE REGISTRO (sin cambios) ---
-            <RegisterForm 
-              googleData={googleUserData}
-              affiliateData={affiliateOffer}
-            />
-
+            <RegisterForm googleData={googleUserData} affiliateData={affiliateOffer} />
           )}
         </div>
       </div>

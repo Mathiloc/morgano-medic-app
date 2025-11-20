@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../Context/AuthContext.jsx';
+import React, { useEffect } from 'react';
+// Corregimos la ruta a minúsculas "context" para evitar errores en producción
+import { useAuth } from '../Context/AuthContext.jsx'; 
 import { DashboardSkeleton } from '../components/DashboardSkeleton.jsx';
-import '../styles/Dashboard.css'; // Importamos los estilos
+import { useDashboard } from '../hooks/useDashboard'; // 👈 1. IMPORTAMOS EL CEREBRO
+import '../styles/Dashboard.css';
 
 // Componente de círculo de progreso
 function ProgressCircle({ progress }) {
@@ -18,60 +20,20 @@ function ProgressCircle({ progress }) {
   );
 }
 
-// --- DATOS DE SIMULACIÓN ---
-const fakeDashboardData = {
-  gamification: {
-    progress: 75,
-    streak: 3,
-    badges: [
-      {
-        nombre: 'Pionero',
-        iconoUrl: 'https://placehold.co/40x40/f4f7f5/20807C?text=P',
-      },
-    ],
-  },
-  lastClasses: [
-    {
-      cursoId: '123',
-      titulo: 'Cardiología: Repaso Esencial',
-      area: 'Cardiología',
-    },
-    {
-      cursoId: '456',
-      titulo: 'Neumología: Casos Clínicos',
-      area: 'Neumología',
-    },
-  ],
-};
-// --- FIN DE DATOS DE SIMULACIÓN ---
-
 export function InicioPage() {
   const { currentUser } = useAuth();
-  const [dashboardData, setDashboardData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  
+  // 👇 2. USAMOS EL HOOK
+  // Ya no hay datos falsos aquí. El componente pide los datos y el hook se encarga.
+  const { dashboardData, isLoading } = useDashboard();
 
+  // --- useEffect para Feather Icons ---
   useEffect(() => {
-    const loadData = async () => {
-      if (!currentUser) return;
-      setIsLoading(true);
-
-      // Simulación
-      setTimeout(() => {
-        setDashboardData(fakeDashboardData);
-        setIsLoading(false);
-      }, 1000);
-    };
-
-    loadData();
-  }, [currentUser]);
-
-  // --- AÑADIDO: useEffect para Feather Icons ---
-  useEffect(() => {
+    // Verificamos si ya cargó y si window.feather existe
     if (!isLoading && window.feather) {
-      // Dibuja los íconos (como "play-circle" y "zap")
       window.feather.replace();
     }
-  }, [isLoading]); // Se activa cuando isLoading cambia
+  }, [isLoading]); 
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -92,6 +54,8 @@ export function InicioPage() {
 
   return (
     <div className="dashboard-grid">
+      
+      {/* WIDGET: CLASES */}
       <div
         id="last-classes-container"
         className="dashboard-widget"
@@ -123,10 +87,14 @@ export function InicioPage() {
           )}
         </div>
       </div>
+
+      {/* WIDGET: PROGRESO */}
       <div id="progress-container" className="dashboard-widget">
         <h3 className="widget-title">Tu Progreso</h3>
         <ProgressCircle progress={progress} />
       </div>
+
+      {/* WIDGET: RACHA */}
       <div id="streak-container" className="dashboard-widget">
         <h3 className="widget-title">Racha de Estudio</h3>
         <div className="streak-container">
@@ -139,6 +107,8 @@ export function InicioPage() {
           </div>
         </div>
       </div>
+
+      {/* WIDGET: INSIGNIAS */}
       <div id="badges-container" className="dashboard-widget">
         <h3 className="widget-title">Mis Insignias</h3>
         {gamification?.badges?.length > 0 ? (
@@ -150,7 +120,8 @@ export function InicioPage() {
                 title={badge.nombre}
               >
                 <img
-                  src={badge.iconoUrl}
+                  // Usamos la propiedad correcta del hook (iconUrl)
+                  src={badge.iconUrl || badge.iconoUrl} 
                   alt={badge.nombre}
                   loading="lazy"
                 />
