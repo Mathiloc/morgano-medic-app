@@ -1,0 +1,281 @@
+/* --- 1. VARIABLES EXACTAS DE TU MARCA --- */
+:root {
+  --mm-verde-principal: #20807C;
+  --mm-verde-menta: #48E5C2;
+  --mm-gris-oscuro: #1D2734;
+  --mm-gris-claro: #F4F7F5;
+  --mm-azul-grad: #00B4D8;
+  --mm-fondo-premium: #13161C;
+  
+  --font-sans: "Inter", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+}
+
+/* --- 2. ESTILOS GLOBALES DE LA PÁGINA --- */
+.enam-page-wrapper {
+  background-color: var(--mm-fondo-premium);
+  color: #e2e8f0; /* Un gris muy claro para texto */
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Títulos */
+h1, h2, h3, .enam-hero-title, .section-title {
+  font-family: var(--font-poppins);
+}
+
+/* --- 3. TUS GRADIENTES PERSONALIZADOS --- */
+.gradient-deep-dive {
+  background-image: linear-gradient(120deg, var(--mm-verde-principal), var(--mm-verde-menta));
+}
+
+.gradient-tech-flow {
+  background-image: linear-gradient(to right, var(--mm-verde-menta), var(--mm-azul-grad));
+}
+
+.text-gradient {
+  background: linear-gradient(to right, var(--mm-verde-menta), var(--mm-azul-grad));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- 4. HERO SECTION (FONDO RADIAL) --- */
+.hero-bg {
+  background-color: transparent;
+  /* Tu gradiente radial exacto */
+  background-image: radial-gradient(circle at top right, rgba(32, 128, 124, 0.2), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(72, 229, 194, 0.15), transparent 50%);
+  padding-bottom: 5rem;
+}
+
+.enam-hero-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 8rem; /* Espacio para el header */
+  padding-bottom: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  min-height: 85vh;
+}
+
+.enam-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Títulos y Textos del Hero */
+.enam-hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) { .enam-hero-title { font-size: 2.5rem; } }
+
+.enam-hero-subtitle {
+  font-size: 1.25rem;
+  color: #d1d5db; /* Gris claro */
+  max-width: 42rem;
+  margin: 0 auto 2rem auto;
+}
+
+/* --- 5. BANNER DE DESCUENTO (Tu diseño redondeado) --- */
+.discount-banner {
+  margin-bottom: 3rem;
+}
+.discount-banner-inner {
+  /* Usamos tu clase .gradient-deep-dive */
+  background-image: linear-gradient(120deg, var(--mm-verde-principal), var(--mm-verde-menta));
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+@media (min-width: 640px) { .discount-banner-inner { flex-direction: row; gap: 2rem; } }
+
+.price-box {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+.price-old { opacity: 0.7; text-decoration: line-through; margin-right: 0.5rem; }
+
+/* Cajas del contador */
+.countdown-box {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+/* Botón CTA Principal */
+.enam-cta-button {
+  display: inline-block;
+  /* Usamos tu clase .gradient-tech-flow */
+  background-image: linear-gradient(to right, var(--mm-verde-menta), var(--mm-azul-grad));
+  color: white;
+  font-weight: 700;
+  font-size: 1.125rem;
+  padding: 1rem 2.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  margin-top: 2rem;
+}
+.enam-cta-button:hover { transform: scale(1.05); }
+
+/* --- 6. LOGOS Y PRUEBA SOCIAL --- */
+.social-title {
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  opacity: 0.7;
+  filter: grayscale(100%);
+  transition: all 0.5s ease;
+}
+.social-grid:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+/* ¡IMPORTANTE! Fix para que los logos no se vean gigantes */
+.social-logo {
+  height: 40px !important;
+  width: auto !important;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+/* --- 7. CARDS Y EFECTOS (Estilos oscuros) --- */
+.enam-card-dark {
+  background-color: var(--mm-gris-oscuro);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(128, 128, 128, 0.2); /* Borde sutil */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.enam-card-dark:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(72, 229, 194, 0.1);
+  border-color: var(--mm-verde-menta);
+}
+
+/* Sección Autoridad */
+.authority-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+@media (min-width: 1024px) { .authority-grid { grid-template-columns: 1fr 1fr; } }
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.feature-item.active, .feature-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(72, 229, 194, 0.5);
+}
+.feature-icon-box {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  /* Usamos tu gradiente deep-dive */
+  background-image: linear-gradient(120deg, var(--mm-verde-principal), var(--mm-verde-menta));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+.feature-text h3 { color: white; font-weight: 700; font-size: 1.125rem; margin: 0; }
+.feature-text p { color: #9ca3af; font-size: 0.9rem; margin-top: 0.25rem; }
+
+/* Planes de Precio */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.plan-card {
+  background-color: var(--mm-gris-oscuro);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+.plan-card:hover { transform: scale(1.02); border-color: var(--mm-verde-menta); }
+.plan-card.white-card {
+  background-color: white;
+  color: var(--mm-gris-oscuro);
+  transform: scale(1.05);
+  z-index: 10;
+}
+.plan-card.white-card h3, .plan-card.white-card .plan-price { color: var(--mm-gris-oscuro); }
+
+.plan-price { font-size: 3rem; font-weight: 700; margin: 1rem 0; color: white; }
+.plan-price span { font-size: 1rem; font-weight: 400; color: #9ca3af; }
+
+.plan-btn {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: auto;
+  border: 2px solid var(--mm-verde-menta);
+  color: var(--mm-verde-menta);
+  transition: all 0.3s;
+}
+.plan-btn:hover { background-color: var(--mm-verde-menta); color: var(--mm-gris-oscuro); }
+
+/* Botón especial del plan destacado */
+.plan-btn-gradient {
+  background-image: linear-gradient(to right, var(--mm-verde-menta), var(--mm-azul-grad));
+  color: white;
+  border: none;
+}
+.plan-btn-gradient:hover { transform: scale(1.05); }
