@@ -6,6 +6,7 @@ import { AuthProvider } from './Context/AuthContext.jsx'; // 👈 1. Importa el 
 // --- Páginas Públicas ---
 import LandingPage from './pages/LandingPage.jsx';
 import SerumsProgramPage from './pages/SerumsProgramPage.jsx';
+import EnamProgramPage from './pages/EnamProgramPage.jsx';
 import { LoginPage } from './pages/LoginPage.jsx';
 
 // --- Layout y Páginas del Dashboard ---
@@ -24,6 +25,7 @@ const AfiliadosPage = () => <div>Vista de Afiliados</div>;
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   { path: "/serums", element: <SerumsProgramPage /> },
+  { path: "/enam", element: <EnamProgramPage /> },
   { path: "/login", element: <LoginPage /> }, // 👈 Esta ruta ahora existe
   {
     path: "/board",
