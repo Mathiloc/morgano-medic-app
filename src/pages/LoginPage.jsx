@@ -8,8 +8,8 @@ import { RegisterForm } from '../components/RegisterForm.jsx';
 import { useLogin } from '../hooks/useLogin';     
 import { useAffiliate } from '../hooks/useAffiliate'; 
 import '../styles/Dashboard.css';
+import logoVerde from '../assets/images/Logo-Verde.png';
 
-const logoVerde = "https://i.ibb.co/3YWQn17F/Logo-Verde.png";
 
 // ✅ SEGURIDAD: Leemos el ID desde el archivo .env
 // Si no existe, evitará que la app se rompa pero mostrará un error en consola
@@ -144,7 +144,10 @@ export function LoginPage() {
               {/* Botón de Google */}
               <div id="google-signin-btn-container" ref={googleButtonContainerRef}></div>
               
-              <div className="auth-separator">O</div>
+              <div>
+                   
+                   
+              </div>
               
               {/* Formulario Email */}
               <form id="email-login-form" onSubmit={handleEmailLogin}>
