@@ -10,40 +10,70 @@ import { useOferta } from '../hooks/useOferta';
 import '../styles/SerumsPage.css';
 import '../styles/Dashboard.css';
 
+
+//Aqui van las espcializaciones
+import Medicina from '../assets/Especializaciones/llamita-Medicina.png';
+import Psicologia from '../assets/Especializaciones/llamita-Psicologia.png';
+import Enfermeria from  '../assets/Especializaciones/llamita-Enfermeria.png'; 
+import Odontologia from '../assets/Especializaciones/llamita-Odontologia.png'; 
+import QuimicaFarmaceutica from '../assets/Especializaciones/llamita-Quimico.png'; 
+import Obstetricia from '../assets/Especializaciones/llama-obstetra.png'; 
+import Nutricion from '../assets/Especializaciones/llamita-nutricion.png'; 
+import Biologia from '../assets/Especializaciones/llamita-biologia.png';
+import TrabajoSocial from  '../assets/Especializaciones/llamita-trabajo-social.png'; 
+import IngSanitaria from '../assets/Especializaciones/llamita-Ingeneria-Sanitario.png';
+import Terapia from '../assets/Especializaciones/llamita-T-Terapia-fisica.png'; 
+//aqui van las universidades
+import SanMarcos from '../assets/universidades/San-Marcos.png';
+import Unsac from '../assets/universidades/Logo-Unsaac.png';
+import Upc from '../assets/universidades/Logo-Upc.png';
+import Villarreal from '../assets/universidades/Logo-Villarreal.png'
+import Cientifica_del_Sur from '../assets/universidades/Logo-Cientifica-del-Sur.png';
+import SJB from '../assets/universidades/Logo-San-Juan-Bautista.png'; 
+import UPN from '../assets/universidades/Logo-UPN.png';
+import Usil from '../assets/universidades/Logo-Usil.png';
+import UAP  from '../assets/universidades/Logo-UAP.png';
+import Andina_Cusco from '../assets/universidades/Logo-Andina-del-cusco.png';
+import U_Peruana_Andes from '../assets/universidades/Logo-universidad-De-los-Andes.png';
+import Catolica_Sedes_Sapiens from '../assets/universidades/Universidad-Catolica-Sedes-Sapiens.png';
+import Nacional_del_Centro  from '../assets/universidades/Logo-Nacional-del-centro-del-peru-huancayo.png';
+import Los_Angeles_Chimbote from '../assets/universidades/Logo-universidad-los-angeles-de-Chimbote.webp';
+import Nacional_Intercultural from '../assets/universidades/Universidad-Nacional-Intercultural-Amazonas.png';
+import Nacional_de_Ucayali from '../assets/universidades/Logo-de-universidad-nacional-de-Ucayali.png'; 
 // --- DATOS: UNIVERSIDADES (Prueba Social) ---
 // Romario estará orgulloso: Si quieres agregar una, solo la pones aquí.
 const UNIVERSITIES_DATA = [
-  { id: 1, name: "San Marcos", img: "https://i.ibb.co/qFDLkYKT/San-Marcos.png" },
-  { id: 2, name: "Unsaac", img: "https://i.ibb.co/xqw33pq7/Logo-Unsaac.png" },
-  { id: 3, name: "UPC", img: "https://i.ibb.co/mrHXS2Qb/Logo-Upc.png" },
-  { id: 4, name: "Villarreal", img: "https://i.ibb.co/7dpCbbkq/Logo-Villarreal.png" },
-  { id: 5, name: "Cientifica del Sur", img: "https://i.ibb.co/n8nBB56w/Logo-Cientifica-del-Sur.png" },
-  { id: 6, name: "San Juan Bautista", img: "https://i.ibb.co/bfPsTxH/Logo-San-Juan-Bautista.png" },
-  { id: 7, name: "UPN", img: "https://i.ibb.co/fGtRrRM3/Logo-UPN.png" },
-  { id: 8, name: "Usil", img: "https://i.ibb.co/wrgJCJZ2/Logo-Usil.png" },
-  { id: 9, name: "UAP", img: "https://i.ibb.co/sJNJW7Hw/Logo-UAP.png" },
-  { id: 10, name: "Andina del Cusco", img: "https://i.ibb.co/xKYRfGPw/Logo-Andina-del-cusco.png" },
-  { id: 11, name: "U. Peruana de los Andes", img: "https://i.ibb.co/KpxSgb1h/Logo-universidad-Peruana-de-los-andes.png" },
-  { id: 12, name: "Catolica Sedes Sapiens", img: "https://i.ibb.co/V0L417q6/Universidad-Catolica-Sedes-Sapiens.png" },
-  { id: 13, name: "Nacional del Centro", img: "https://i.ibb.co/1YXkx0HJ/Logo-Nacional-del-centro-del-peru-huancayo.png" },
-  { id: 14, name: "Los Angeles de Chimbote", img: "https://i.ibb.co/fYGrHj2w/Logo-universidad-los-angeles-de-Chimbote.webp" },
-  { id: 15, name: "Nacional Intercultural Amazonas", img: "https://i.ibb.co/HDMmr8sd/Universidad-Nacional-Intercultural-Amazonas.png" },
-  { id: 16, name: "Nacional de Ucayali", img: "https://i.ibb.co/qFLDbghf/Logo-de-universidad-nacional-de-Ucayali.png" },
+  { id: 1, name: "San Marcos", img: SanMarcos },
+  { id: 2, name: "Unsaac", img: Unsac },
+  { id: 3, name: "UPC", img:  Upc},
+  { id: 4, name: "Villarreal", img: Villarreal},
+  { id: 5, name: "Cientifica del Sur", img: Cientifica_del_Sur },
+  { id: 6, name: "San Juan Bautista", img: SJB},
+  { id: 7, name: "UPN", img: UPN },
+  { id: 8, name: "Usil", img: Usil },
+  { id: 9, name: "UAP", img: UAP },
+  { id: 10, name: "Andina del Cusco", img: Andina_Cusco },
+  { id: 11, name: "U. Peruana de los Andes", img: U_Peruana_Andes },
+  { id: 12, name: "Catolica Sedes Sapiens", img: Catolica_Sedes_Sapiens },
+  { id: 13, name: "Nacional del Centro", img: Nacional_del_Centro},
+  { id: 14, name: "Los Angeles de Chimbote", img: Los_Angeles_Chimbote },
+  { id: 15, name: "Nacional Intercultural Amazonas", img: Nacional_Intercultural},
+  { id: 16, name: "Nacional de Ucayali", img: Nacional_de_Ucayali },
 ];
 
 // --- DATOS: ESPECIALIDADES ---
 const SPECIALTIES_DATA = [
-  { id: 1, name: "MEDICINA", img: "https://i.ibb.co/bk188P8/Llamita-Medicina.png" },
-  { id: 2, name: "PSICOLOGÍA", img: "https://i.ibb.co/wND2bDJP/Llamita-Psicologia.png" },
-  { id: 3, name: "ENFERMERÍA", img: "https://i.ibb.co/Kx0PrvHn/Llamita-Enfermeria.png" },
-  { id: 4, name: "ODONTOLOGÍA", img: "https://i.ibb.co/nsykCndz/Llamita-Odontologia.png" },
-  { id: 5, name: "QUÍMICO F.", img: "https://i.ibb.co/HfFkyTPb/Lllamita-Quimico-Farmaceutico.png" },
-  { id: 6, name: "OBSTETRICIA", img: "https://i.ibb.co/RkBbR7JM/llama-obstetra.png" },
-  { id: 7, name: "NUTRICIÓN", img: "https://i.ibb.co/Ng3MDJK0/llamita-nutricion.png" },
-  { id: 8, name: "BIOLOGÍA", img: "https://i.ibb.co/yFgtbVjd/llamita-biologia.png" },
-  { id: 9, name: "TRABAJO S.", img: "https://i.ibb.co/TMW42YgF/llamita-trabajo-social.png" },
-  { id: 10, name: "ING. SANITARIA", img: "https://i.ibb.co/jvFPKByT/Llamita-Ingeneria-Sanitario.png" },
-  { id: 11, name: "TECNOLOGÍA M.", img: "https://i.ibb.co/XZwDZFV4/llamita-T-Terapia-fisica.png" },
+  { id: 1, name: "MEDICINA", img: Medicina  },
+  { id: 2, name: "PSICOLOGÍA", img: Psicologia},
+  { id: 3, name: "ENFERMERÍA", img: Enfermeria },
+  { id: 4, name: "ODONTOLOGÍA", img: Odontologia },
+  { id: 5, name: "QUÍMICO F.", img: QuimicaFarmaceutica },
+  { id: 6, name: "OBSTETRICIA", img: Obstetricia },
+  { id: 7, name: "NUTRICIÓN", img: Nutricion  },
+  { id: 8, name: "BIOLOGÍA", img: Biologia },
+  { id: 9, name: "TRABAJO S.", img: TrabajoSocial },
+  { id: 10, name: "ING. SANITARIA", img: IngSanitaria },
+  { id: 11, name: "TECNOLOGÍA M.", img: Terapia},
 ];
 
 const SerumsProgramPage = () => {
@@ -238,12 +268,12 @@ const SerumsProgramPage = () => {
                   </Link>
                 </div>
 
-                {/* Sub-sección: Especialidades (CON LOOP) */}
+                
                 <div className="specialty-section">
                   <h4 className="specialty-section-title">Preparación por Especialidad</h4>
                   <div className="specialty-grid">
                     
-                    {/* 👇 AQUÍ ESTÁ LA MAGIA: GENERAMOS LAS LLAMITAS CON UN LOOP */}
+                    
                     {SPECIALTIES_DATA.map((spec) => (
                       <Link key={spec.id} to="/login" className="specialty-card">
                         <img loading="lazy" src={spec.img} alt={`Llamita ${spec.name}`} />
