@@ -4,23 +4,19 @@ import { useAuth } from '../Context/AuthContext.jsx';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { apiCall } from '../utils/api.js';
 import { RegisterForm } from '../components/RegisterForm.jsx';
-// 👇 IMPORTAMOS LOS NUEVOS HOOKS (CEREBROS)
+//  IMPORTAMOS LOS NUEVOS HOOKS (CEREBROS)
 import { useLogin } from '../hooks/useLogin';     
 import { useAffiliate } from '../hooks/useAffiliate'; 
-import '../styles/Dashboard.css';
 import logoVerde from '../assets/images/Logo-Verde.png';
 
 
-// ✅ SEGURIDAD: Leemos el ID desde el archivo .env
+
 // Si no existe, evitará que la app se rompa pero mostrará un error en consola
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export function LoginPage() {
   const { login: authLogin, currentUser } = useAuth();
   const navigate = useNavigate();
-  
-  // 👇 USAMOS LOS HOOKS PARA LIMPIAR LA VISTA
-  // useLogin: Maneja la carga, errores y validación con el backend simulado
   const { login: loginAPI, isLoading, error: loginError } = useLogin();
   // useAffiliate: Maneja la lectura de cookies y cálculo de descuentos
   const { affiliateOffer } = useAffiliate(); 
