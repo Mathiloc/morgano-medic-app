@@ -1,7 +1,7 @@
-// src/App.jsx (CORREGIDO)
+// src/App.jsx (VERSIÓN INTEGRADA: Ruta + Banqueos + Simulacros + RANKING)
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { AuthProvider } from './Context/AuthContext.jsx'; // 👈 1. Importa el Provider
+import { AuthProvider } from './Context/AuthContext.jsx';
 
 // --- Páginas Públicas ---
 import LandingPage from './pages/LandingPage.jsx';
@@ -13,44 +13,48 @@ import { LoginPage } from './pages/LoginPage.jsx';
 import { DashboardLayout } from './components/DashboardLayout.jsx';
 import { InicioPage } from './pages/InicioPage.jsx';
 
-// --- Placeholders (los necesitarás para que el router no falle) ---
-const RutaPage = () => <div>Vista de Ruta de Aprendizaje</div>;
-const BanqueosPage = () => <div>Vista de Banqueos</div>;
-const SimulacrosPage = () => <div>Vista de Simulacros</div>;
-const RankingPage = () => <div>Vista de Ranking</div>;
-const AfiliadosPage = () => <div>Vista de Afiliados</div>;
+// --- Páginas REALES del Dashboard (Las que ya creamos) ---
+import RutaPage from './pages/RutaPage.jsx';
+import BanqueosPage from './pages/BanqueosPage.jsx';
+import SimulacrosPage from './pages/SimulacrosPage.jsx';
+import RankingPage from './pages/RankingPage.jsx'; // ✅ 1. IMPORTADO
+
+// --- Placeholders (Solo para lo que AÚN falta) ---
+// ❌ RankingPage ELIMINADO de aquí porque ya es real
+const AfiliadosPage = () => <div>Vista de Afiliados (Pronto)</div>;
 // --- Fin de placeholders ---
 
-// 2. Define TODAS las rutas
 const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   { path: "/serums", element: <SerumsProgramPage /> },
   { path: "/enam", element: <EnamProgramPage /> },
-  { path: "/login", element: <LoginPage /> }, // 👈 Esta ruta ahora existe
+  { path: "/login", element: <LoginPage /> },
+  
   {
     path: "/board",
     element: <DashboardLayout />, 
     children: [
       { index: true, element: <Navigate to="/board/inicio" replace /> },
+      
       { path: "inicio", element: <InicioPage /> },
-      { path: "ruta", element: <RutaPage /> },
+      { path: "ruta", element: <RutaPage /> }, 
       { path: "banqueos", element: <BanqueosPage /> },
       { path: "simulacros", element: <SimulacrosPage /> },
+      
+      // ✅ 2. Ahora apunta al componente real importado arriba
       { path: "ranking", element: <RankingPage /> },
+      
       { path: "afiliados", element: <AfiliadosPage /> },
     ],
   },
 ]);
 
-// 3. Define el componente App
 function App() {
   return (
-    // 4. Envuelve el RouterProvider en el AuthProvider
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
   );
 }
 
-// 5. Asegúrate de que sea export default
 export default App;
