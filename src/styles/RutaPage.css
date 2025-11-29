@@ -1,0 +1,112 @@
+/* Contenedor Principal */
+.ruta-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  color: #1D2734;
+}
+
+/* Título */
+.ruta-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1D2734;
+}
+
+/* Grid de Tarjetas */
+.cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Estilo de la Tarjeta (Idéntico a tu captura) */
+.area-card {
+  background-color: #FFFFFF;
+  border: 1px solid #EAEBEB;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.area-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(32, 128, 124, 0.1); /* Sombra suave verdosa */
+  border-color: #20807C; /* Tu verde principal */
+}
+
+/* Icono dentro de la tarjeta */
+.area-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #F4F7F5; /* Fondo gris muy suave */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #20807C; /* Icono verde */
+}
+
+/* Texto de la tarjeta */
+.area-info h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+}
+
+.area-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6B7280; /* Texto secundario gris */
+}
+
+/* Botón Volver */
+.back-btn {
+  background: none;
+  border: none;
+  color: #20807C;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* Animación de entrada suave */
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ruta-title {
+    font-size: 1.5rem;
+  }
+  .area-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
