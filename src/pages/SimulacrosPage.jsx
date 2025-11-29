@@ -1,191 +1,168 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../Context/AuthContext.jsx';
-// import feather from 'feather-icons'; // ELIMINADO
+import React from 'react';
+import { useSimulacros } from '../hooks/useSimulacros';
+import { Layers, ArrowLeft, Edit3, Clock, HelpCircle, Play, Lock, CheckCircle, BarChart2 } from 'lucide-react';
 import '../styles/Dashboard.css';
 
-// --- COMPONENTE DE SKELETON (ESQUELETO) ---
-const AreaSkeleton = ({ count = 3 }) => (
-  <div>
-    {Array.from({ length: count }, (_, i) => (
-      <div key={i} className="skeleton-card" aria-hidden="true">
-        <div className="skeleton skeleton-icon" style={{ borderRadius: '12px' }}></div>
-        <div className="skeleton-text-group">
-          <div className="skeleton skeleton-text"></div>
-          <div className="skeleton skeleton-text short"></div>
-        </div>
-      </div>
-    ))}
+// --- COMPONENTE 1: Item de la Lista de Áreas (Vertical) ---
+const AreaListItem = ({ area, onClick }) => (
+  <div 
+    onClick={() => onClick(area.id)}
+    style={{
+      backgroundColor: 'var(--superficie-color)',
+      borderRadius: '12px',
+      padding: '1.5rem',
+      marginBottom: '1rem',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1.5rem',
+      border: '1px solid transparent',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      transition: 'all 0.2s ease'
+    }}
+    onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-2px)';
+        e.currentTarget.style.boxShadow = '0 8px 20px rgba(32,128,124,0.08)';
+        e.currentTarget.style.borderColor = 'var(--verde-principal)';
+    }}
+    onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+        e.currentTarget.style.borderColor = 'transparent';
+    }}
+  >
+    {/* Icono Verde Claro */}
+    <div style={{
+      width: '48px', height: '48px',
+      backgroundColor: '#F0FDF4',
+      borderRadius: '12px',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: 'var(--verde-principal)',
+      flexShrink: 0
+    }}>
+      <Layers size={24} />
+    </div>
+
+    {/* Texto */}
+    <div style={{ flex: 1 }}>
+      <h3 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem', fontFamily: 'var(--font-titulos)', color: 'var(--texto-principal)' }}>
+        {area.nombre}
+      </h3>
+      <p style={{ margin: 0, color: 'var(--texto-secundario)', fontSize: '0.9rem' }}>
+        {area.descripcion}
+      </p>
+    </div>
   </div>
 );
 
-// --- DATOS DE SIMULACIÓN (NIVEL 1 Y 2) ---
-const fakeCategoriasData = {
-  'SERUMS 2026 - I': [
-    { categoriaId: 'cat-serums-1', titulo: 'Simulacros Integrales SERUMS', descripcion: 'Simulacros completos.', progreso: 100 },
-  ],
-  'ENAM 2025 - II': [
-    { categoriaId: 'cat-enam-1', titulo: 'Simulacros Integrales ENAM', descripcion: 'Simulacros completos.', progreso: 50 },
-  ],
-};
-
-// --- DATOS DE SIMULACIÓN (NIVEL 3: LISTA) ---
-const fakeSimulacrosData = {
-  'cat-serums-1': [
-    { simulacroID: 'sim-serums-1', titulo: '1er Simulacro SERUMS 2026', numeroPreguntas: 200, tiempoMinutos: 180, completado: true, tieneAcceso: true, resultado: '150/200 (75%)' },
-  ],
-  'cat-enam-1': [
-    { simulacroID: 'sim-enam-1', titulo: '1er Simulacro ENAM 2025', numeroPreguntas: 200, tiempoMinutos: 180, completado: false, tieneAcceso: true },
-    { simulacroID: 'sim-enam-2', titulo: '2do Simulacro ENAM 2025 (PRO)', numeroPreguntas: 200, tiempoMinutos: 180, completado: false, tieneAcceso: false },
-  ],
-};
-// --- FIN DE DATOS DE SIMULACIÓN ---
-
-// --- VISTAS... (Nivel 1 y 2) ---
-const AreaSelectionView = ({ areas, onSelectArea }) => (
-  <div id="simulacros-areas-view">
-    {areas.map((areaName) => (
-      <div key={areaName} className="area-card" onClick={() => onSelectArea(areaName)}>
-        <div className="area-card-icon"><i data-feather="layers"></i></div>
-        <div className="area-card-info"><h3>{areaName}</h3><p>Explora las categorías...</p></div>
-      </div>
-    ))}
-  </div>
-);
-
-const CategorySelectionView = ({ areaTitle, categories, onSelectCategory, onBack }) => (
-  <div id="simulacros-categories-view">
-    <button className="back-button" onClick={onBack}><i data-feather="arrow-left"></i> Volver a Áreas</button>
-    <h1>{areaTitle}</h1>
-    {categories.map((cat) => (
-      <div key={cat.categoriaId} className="area-card">
-        <div className="category-card-content">
-          <div className="area-card-icon"><i data-feather="edit-3"></i></div>
-          <div className="area-card-info">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3>{cat.titulo}</h3>
-              <span className="progress-text">{cat.progreso}%</span>
-            </div>
-            <p>{cat.descripcion}</p>
-            <div className="progress-bar-container" style={{ marginBottom: 0 }}>
-              <div className="progress-bar" style={{ width: `${cat.progreso}%` }}></div>
-            </div>
-          </div>
-          <button className="morganoboard-btn" onClick={() => onSelectCategory(cat)}>Ver Simulacros</button>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-// --- COMPONENTE DE VISTA DE LISTA (Nivel 3) ---
-const SimulacroListView = ({ category, onBack }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [simulacros, setSimulacros] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setSimulacros(fakeSimulacrosData[category.categoriaId] || []);
-      setIsLoading(false);
-      // CORREGIDO: Usamos window.feather
-      if (window.feather) window.feather.replace();
-    }, 500);
-  }, [category.categoriaId]);
-
-  if (isLoading) {
-    return (
-      <>
-        <button className="back-button" onClick={onBack}><i data-feather="arrow-left"></i> Volver</button>
+// --- COMPONENTE 2: Lista de Exámenes (Simulacros) ---
+const SimulacroList = ({ category, simulacros, onBack }) => (
+    <div className="fade-in">
+      <button className="back-button" onClick={onBack} style={{background:'none', border:'none', cursor:'pointer', color:'var(--verde-principal)', display:'flex', alignItems:'center', marginBottom:'1rem'}}>
+        <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver
+      </button>
+      
+      <div className="header-title-container" style={{ marginBottom: '2rem' }}>
         <h1>{category.titulo}</h1>
-        <AreaSkeleton count={2} />
-      </>
-    );
-  }
-
-  return (
-    <div id="simulacros-list-view">
-      <button className="back-button" onClick={onBack}><i data-feather="arrow-left"></i> Volver a Categorías</button>
-      <h1>{category.titulo}</h1>
-      {simulacros.length === 0 ? (
-        <p>No hay simulacros disponibles.</p>
-      ) : (
-        simulacros.map((sim) => {
-          let icon, button, result;
-          if (sim.tieneAcceso) {
-            if (sim.completado) {
-              icon = <i data-feather="check-circle"></i>;
-              result = <div className="simulacro-list-item__result">Resultado: {sim.resultado}</div>;
-              button = <a href={`/reviewSimulacro?simulacroId=${sim.simulacroID}`} className="morganoboard-btn btn-secondary action-btn">Revisar</a>;
-            } else {
-              icon = <i data-feather="edit-3"></i>;
-              button = <a href={`/quizsimulacro?simulacroId=${sim.simulacroID}`} className="morganoboard-btn action-btn">Iniciar</a>;
-            }
-          } else {
-            icon = <i data-feather="lock"></i>;
-            button = <a href="/precios" className="morganoboard-btn action-btn" style={{ background: 'var(--acento-violeta)' }}><i data-feather="star" style={{ width: '1em', height: '1em' }}></i> Ver Planes</a>;
-          }
-          return (
-            <div key={sim.simulacroID} className={`simulacro-list-item ${!sim.tieneAcceso ? 'simulacro-list-item--locked' : ''}`}>
-              <div className="simulacro-list-item__icon">{icon}</div>
-              <div className="simulacro-list-item__info">
-                <h3 className="simulacro-list-item__title">{sim.titulo}</h3>
-                <div className="simulacro-list-item__meta">
-                  <span className="meta-preguntas">{sim.numeroPreguntas} Preguntas</span>
-                  <span>&bull;</span>
-                  <span className="meta-tiempo">{sim.tiempoMinutos} Minutos</span>
+        <p style={{ color: 'var(--texto-secundario)' }}>Mide tus conocimientos con tiempo real.</p>
+      </div>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {simulacros.length > 0 ? simulacros.map((sim) => (
+            <div key={sim.id} className="class-item" style={{ cursor: 'default', border: sim.estado === 'locked' ? '1px solid #eee' : '1px solid var(--borde-color)' }}>
+                
+                {/* Icono de Estado */}
+                <div className="class-icon" style={{ 
+                    background: sim.estado === 'completed' ? '#D1FAE5' : (sim.estado === 'locked' ? '#F3F4F6' : '#E0F2FE'),
+                    color: sim.estado === 'completed' ? 'var(--success)' : (sim.estado === 'locked' ? '#9CA3AF' : 'var(--verde-principal)')
+                }}>
+                  {sim.estado === 'completed' ? <CheckCircle size={20} /> : (sim.estado === 'locked' ? <Lock size={20} /> : <Edit3 size={20} />)}
                 </div>
-                {result}
-              </div>
-              <div className="simulacro-button-container">{button}</div>
+
+                {/* Info */}
+                <div className="class-info" style={{ flex: 1 }}>
+                    <h4 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{sim.titulo}</h4>
+                    <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: 'var(--texto-secundario)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><HelpCircle size={14}/> {sim.preguntas} Pregs</span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={14}/> {sim.tiempo} min</span>
+                    </div>
+                </div>
+
+                {/* Acciones */}
+                <div>
+                    {sim.estado === 'unlocked' && (
+                        <button className="morganoboard-btn" onClick={() => alert(`Iniciando ${sim.titulo}`)}>
+                            <Play size={16} style={{marginRight:5}}/> Iniciar
+                        </button>
+                    )}
+                    {sim.estado === 'completed' && (
+                         <div style={{ textAlign: 'right' }}>
+                            <span style={{ display: 'block', fontWeight: 'bold', color: 'var(--verde-principal)', fontSize:'0.9rem', marginBottom:'4px' }}>Nota: {sim.nota}</span>
+                            <button className="sidebar-btn" style={{ padding: '4px 8px', fontSize:'0.85rem', color: 'var(--texto-secundario)', height:'auto' }}>
+                                <BarChart2 size={14} style={{marginRight:4}}/> Análisis
+                            </button>
+                        </div>
+                    )}
+                    {sim.estado === 'locked' && (
+                        <button className="morganoboard-btn" style={{ background: 'var(--acento-violeta)', opacity: 0.8 }} onClick={() => window.open('https://morganomedic.com/serums/#precios', '_blank')}>
+                            <Lock size={14} style={{marginRight:5}}/> PRO
+                        </button>
+                    )}
+                </div>
             </div>
-          );
-        })
-      )}
+        )) : <p>Próximamente...</p>}
+      </div>
+    </div>
+);
+
+// --- COMPONENTE 3: Selección de Categorías ---
+const CategorySelection = ({ area, categories, onSelectCategory, onBack }) => (
+  <div className="fade-in">
+    <button className="back-button" onClick={onBack} style={{background:'none', border:'none', cursor:'pointer', color:'var(--verde-principal)', display:'flex', alignItems:'center', marginBottom:'1rem'}}>
+      <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver
+    </button>
+    <h1 style={{ marginBottom: '2rem' }}>{area.nombre}</h1>
+    
+    <div className="dashboard-grid">
+      {categories.length > 0 ? categories.map((cat) => (
+        <div key={cat.id} className="area-card" onClick={() => onSelectCategory(cat.id)} style={{cursor:'pointer', background:'white', padding:'1.5rem', borderRadius:'12px', border:'1px solid #eee'}}>
+          <div style={{color:'var(--verde-principal)', marginBottom:'1rem'}}><Edit3 size={24}/></div>
+          <h3>{cat.titulo}</h3>
+          <p style={{color:'#666', fontSize:'0.9rem'}}>{cat.descripcion}</p>
+        </div>
+      )) : <p>No hay simulacros disponibles en esta área.</p>}
+    </div>
+  </div>
+);
+
+// --- PÁGINA PRINCIPAL ---
+export default function SimulacrosPage() {
+  const { 
+    loading, areas, categories, simulacros, 
+    selectedArea, selectedCategory, 
+    selectArea, selectCategory, goBack 
+  } = useSimulacros();
+
+  if (loading) return <div style={{padding:'2rem'}}>Cargando simulacros...</div>;
+
+  // Renderizado condicional de vistas
+  if (selectedCategory) return <SimulacroList category={selectedCategory} simulacros={simulacros} onBack={goBack} />;
+  if (selectedArea) return <CategorySelection area={selectedArea} categories={categories} onSelectCategory={selectCategory} onBack={goBack} />;
+
+  // Vista Principal (Lista Vertical)
+  return (
+    <div className="fade-in">
+        <h1 style={{ marginBottom: '2rem', fontFamily: 'var(--font-titulos)' }}>Simulacros</h1>
+        
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {areas.map((area) => (
+                <AreaListItem 
+                    key={area.id} 
+                    area={area} 
+                    onClick={selectArea} 
+                />
+            ))}
+        </div>
     </div>
   );
-};
-
-// --- PÁGINA PRINCIPAL DE SIMULACROS ---
-export function SimulacrosPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [areas, setAreas] = useState([]);
-  const [dataByArea, setDataByArea] = useState({});
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { currentUser } = useAuth();
-
-  useEffect(() => {
-    const loadData = async () => {
-      if (!currentUser) return;
-      setIsLoading(true);
-      setTimeout(() => {
-        setDataByArea(fakeCategoriasData);
-        setAreas(Object.keys(fakeCategoriasData));
-        setIsLoading(false);
-      }, 1000);
-    };
-    loadData();
-  }, [currentUser]);
-
-  // Efecto para recargar los íconos de Feather
-  useEffect(() => {
-    // CORREGIDO: Usamos window.feather
-    if (!isLoading && window.feather) {
-      window.feather.replace();
-    }
-  }, [isLoading, selectedArea, selectedCategory]);
-
-  if (isLoading) {
-    return <AreaSkeleton count={4} />;
-  }
-
-  if (selectedArea && selectedCategory) {
-    return <SimulacroListView category={selectedCategory} onBack={() => setSelectedCategory(null)} />;
-  }
-
-  if (selectedArea) {
-    return <CategorySelectionView areaTitle={selectedArea} categories={dataByArea[selectedArea] || []} onSelectCategory={setSelectedCategory} onBack={() => setSelectedArea(null)} />;
-  }
-
-  return <AreaSelectionView areas={areas} onSelectArea={setSelectedArea} />;
 }

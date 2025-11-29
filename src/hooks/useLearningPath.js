@@ -1,40 +1,39 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../Context/AuthContext'; // Ajusta la ruta si tu carpeta es 'context' o 'Context'
-import { apiCall } from '../utils/api';
+import { useAuth } from '../Context/AuthContext'; 
+// Asegúrate de que la ruta a 'api' sea correcta. 
+// Si seguiste mi consejo de moverlo a 'services', cámbialo aquí.
+import { apiCall } from '../utils/api'; 
 
 export const useLearningPath = () => {
-  const { user } = useAuth();
+  // CORRECCIÓN: Usamos 'currentUser' para mantener consistencia con tu DashboardLayout
+  const { currentUser } = useAuth(); 
   
-  // Estados para los datos
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [areas, setAreas] = useState([]);       // Lista de áreas (Cardiología, etc.)
-  const [courses, setCourses] = useState({});   // Objeto con los cursos por área
-  
-  // Estado para la navegación interna (null = ver áreas, "Nombre" = ver timeline)
+  const [areas, setAreas] = useState([]);      
+  const [courses, setCourses] = useState({});   
   const [selectedArea, setSelectedArea] = useState(null);
 
   useEffect(() => {
     const fetchLearningPath = async () => {
-      // Si no hay usuario, no hacemos nada
-      if (!user?.email) return;
+      // Usamos currentUser.email
+      if (!currentUser?.email) return;
 
       try {
         setLoading(true);
         setError(null);
 
-        // Llamada a tu API real (Google Apps Script)
-        const response = await apiCall('getLearningPathData', { email: user.email });
+        // Llamada a tu API
+        const response = await apiCall('getLearningPathData', { email: currentUser.email });
 
         if (response.success) {
-          // Guardamos los datos tal como vienen del backend
           setAreas(response.data.areas || []);
           setCourses(response.data.cursosPorArea || {});
         } else {
           setError(response.message || "No se pudo cargar la ruta de aprendizaje.");
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error en useLearningPath:", err);
         setError("Error de conexión al cargar la ruta.");
       } finally {
         setLoading(false);
@@ -42,21 +41,18 @@ export const useLearningPath = () => {
     };
 
     fetchLearningPath();
-  }, [user]);
+  }, [currentUser]); // Dependencia actualizada
 
-  // Funciones auxiliares para la vista
   const selectArea = (areaName) => {
     setSelectedArea(areaName);
-    // Scroll arriba al cambiar de vista
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Agregué smooth scroll para mejor UX
   };
 
   const goBack = () => {
     setSelectedArea(null);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Retornamos todo lo que la UI necesita
   return { 
     loading, 
     error, 

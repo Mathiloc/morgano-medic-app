@@ -1,205 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../Context/AuthContext.jsx';
-// import feather from 'feather-icons'; // ELIMINADO
+import React from 'react';
+import { useBanqueos } from '../hooks/useBanqueos';
+import { Target, Layers, ArrowLeft, ChevronRight, Play, Lock, CheckCircle } from 'lucide-react';
 import '../styles/Dashboard.css';
 
-// --- COMPONENTE DE SKELETON (ESQUELETO) ---
-const AreaSkeleton = ({ count = 3 }) => (
-  <div>
-    {Array.from({ length: count }, (_, i) => (
-      <div key={i} className="skeleton-card" aria-hidden="true">
-        <div className="skeleton skeleton-icon" style={{ borderRadius: '12px' }}></div>
-        <div className="skeleton-text-group">
-          <div className="skeleton skeleton-text"></div>
-          <div className="skeleton skeleton-text short"></div>
-        </div>
-      </div>
-    ))}
+// --- COMPONENTE: Tarjeta de Área (Estilo Lista Vertical) ---
+const AreaListItem = ({ area, onClick }) => (
+  <div 
+    onClick={() => onClick(area.id)}
+    style={{
+      backgroundColor: 'var(--superficie-color)', // Blanco
+      borderRadius: '12px',
+      padding: '1.5rem',
+      marginBottom: '1rem', // Espacio entre tarjetas
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1.5rem',
+      border: '1px solid transparent', // Borde invisible por defecto
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)', // Sombra sutil
+      transition: 'all 0.2s ease'
+    }}
+    className="area-list-card" // Clase para hover en CSS si quieres
+    onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-2px)';
+        e.currentTarget.style.boxShadow = '0 8px 20px rgba(32,128,124,0.08)';
+        e.currentTarget.style.borderColor = 'var(--verde-principal)';
+    }}
+    onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+        e.currentTarget.style.borderColor = 'transparent';
+    }}
+  >
+    {/* Icono Cuadrado Verde Claro */}
+    <div style={{
+      width: '48px',
+      height: '48px',
+      backgroundColor: '#F0FDF4', // Verde muy claro (tipo Tailwind green-50)
+      borderRadius: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--verde-principal)', // Icono verde oscuro
+      flexShrink: 0
+    }}>
+      <Layers size={24} />
+    </div>
+
+    {/* Texto */}
+    <div style={{ flex: 1 }}>
+      <h3 style={{ 
+        margin: '0 0 0.25rem 0', 
+        fontSize: '1.1rem', 
+        fontFamily: 'var(--font-titulos)',
+        color: 'var(--texto-principal)' 
+      }}>
+        {area.nombre}
+      </h3>
+      <p style={{ margin: 0, color: 'var(--texto-secundario)', fontSize: '0.9rem' }}>
+        {area.descripcion}
+      </p>
+    </div>
   </div>
 );
 
-// --- DATOS DE SIMULACIÓN (NIVEL 1 Y 2) ---
-const fakeCategoriasData = {
-  Medicina: [
-    { categoriaId: 'cat-cardio', titulo: 'Cardiología', descripcion: 'Banqueos de cardio.', progreso: 80 },
-    { categoriaId: 'cat-neumo', titulo: 'Neumología', descripcion: 'Banqueos de neumo.', progreso: 20 },
-  ],
-  Cirugía: [
-    { categoriaId: 'cat-general', titulo: 'Cirugía General', descripcion: 'Banqueos de cirugía.', progreso: 0 },
-  ],
-};
-
-// --- DATOS DE SIMULACIÓN (NIVEL 3: TIMELINE) ---
-const fakeTimelineData = {
-  'cat-cardio': [
-    { banqueoID: 'b-cardio-1', resultadoId: 'res-123', titulo: 'Banqueo de Arritmias', numPreguntas: 20, tiempoSegundos: 30, completado: true, tieneAcceso: true },
-    { banqueoID: 'b-cardio-2', titulo: 'Banqueo de Insuficiencia Cardíaca', numPreguntas: 25, tiempoSegundos: 30, completado: false, tieneAcceso: true },
-  ],
-  'cat-neumo': [
-    { banqueoID: 'b-neumo-1', titulo: 'Banqueo de EPOC y Asma', numPreguntas: 15, tiempoSegundos: 30, completado: false, tieneAcceso: true },
-  ],
-  'cat-general': [
-    { banqueoID: 'b-ciru-1', titulo: 'Banqueo de Abdomen Agudo (PRO)', numPreguntas: 30, tiempoSegundos: 30, completado: false, tieneAcceso: false, planRequerido: 'PRO' },
-  ],
-};
-// --- FIN DE DATOS DE SIMULACIÓN ---
-
-// --- COMPONENTE DE VISTA DE ÁREAS (Nivel 1) ---
-const AreaSelectionView = ({ areas, onSelectArea }) => (
-  <div id="banqueos-areas-view">
-    {areas.map((areaName) => (
-      <div key={areaName} className="area-card" onClick={() => onSelectArea(areaName)}>
-        <div className="area-card-icon"><i data-feather="layers"></i></div>
-        <div className="area-card-info">
-          <h3>{areaName}</h3>
-          <p>Explora las categorías de esta área.</p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-// --- COMPONENTE DE VISTA DE CATEGORÍAS (Nivel 2) ---
-const CategorySelectionView = ({ areaTitle, categories, onSelectCategory, onBack }) => (
-  <div id="banqueos-categories-view">
-    <button className="back-button" onClick={onBack}>
-      <i data-feather="arrow-left"></i> Volver a Áreas
+// --- COMPONENTE 2: Selección de Categorías ---
+// (Reutilizamos la cuadrícula aquí, suele verse bien para subcategorías, o puedes cambiarlo a lista también)
+const CategorySelection = ({ area, categories, onSelectCategory, onBack }) => (
+  <div className="fade-in">
+    <button className="back-button" onClick={onBack} style={{background:'none', border:'none', cursor:'pointer', color:'var(--verde-principal)', display:'flex', alignItems:'center', marginBottom:'1rem'}}>
+      <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver
     </button>
-    <h1>{areaTitle}</h1>
-    {categories.map((cat) => (
-      <div key={cat.categoriaId} className="area-card">
-        <div className="category-card-content">
-          <div className="area-card-icon"><i data-feather="target"></i></div>
-          <div className="area-card-info">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3>{cat.titulo}</h3>
-              <span className="progress-text">{cat.progreso}%</span>
-            </div>
-            <p>{cat.descripcion}</p>
-            <div className="progress-bar-container" style={{ marginBottom: 0 }}>
-              <div className="progress-bar" style={{ width: `${cat.progreso}%` }}></div>
-            </div>
-          </div>
-          <button className="morganoboard-btn" onClick={() => onSelectCategory(cat)}>
-            Ver Banqueos
-          </button>
+    <h1 style={{ marginBottom: '2rem' }}>{area.nombre}</h1>
+    
+    <div className="dashboard-grid"> {/* Grid para categorías */}
+      {categories.length > 0 ? categories.map((cat) => (
+        <div key={cat.id} className="area-card" onClick={() => onSelectCategory(cat.id)} style={{cursor:'pointer', background:'white', padding:'1.5rem', borderRadius:'12px', border:'1px solid #eee'}}>
+          <div style={{color:'var(--verde-principal)', marginBottom:'1rem'}}><Target size={24}/></div>
+          <h3>{cat.titulo}</h3>
+          <p style={{color:'#666', fontSize:'0.9rem'}}>{cat.descripcion}</p>
         </div>
-      </div>
-    ))}
+      )) : <p>No hay categorías disponibles aún.</p>}
+    </div>
   </div>
 );
 
-// --- COMPONENTE DE VISTA DE TIMELINE (Nivel 3) ---
-const BanqueoTimelineView = ({ category, onBack }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [banqueos, setBanqueos] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setBanqueos(fakeTimelineData[category.categoriaId] || []);
-      setIsLoading(false);
-      // CORREGIDO: Usamos window.feather
-      if (window.feather) window.feather.replace();
-    }, 500);
-  }, [category.categoriaId]);
-
-  if (isLoading) {
-    return (
-      <>
-        <button className="back-button" onClick={onBack}>
-          <i data-feather="arrow-left"></i> Volver a Categorías
-        </button>
-        <h1>{category.titulo}</h1>
-        <AreaSkeleton count={2} />
-      </>
-    );
-  }
-
-  return (
-    <div id="banqueos-timeline-view">
-      <button className="back-button" onClick={onBack}>
-        <i data-feather="arrow-left"></i> Volver a Categorías
+// --- COMPONENTE 3: Lista de Banqueos ---
+const BanqueoList = ({ category, banqueos, onBack }) => (
+    <div className="fade-in">
+      <button className="back-button" onClick={onBack} style={{background:'none', border:'none', cursor:'pointer', color:'var(--verde-principal)', display:'flex', alignItems:'center', marginBottom:'1rem'}}>
+        <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver
       </button>
-      <h1>{category.titulo}</h1>
-      {banqueos.length === 0 ? (
-        <p>No hay banqueos disponibles.</p>
-      ) : (
-        banqueos.map((b) => {
-          const status = b.completado ? 'completed' : b.tieneAcceso ? 'unlocked' : 'locked';
-          let icon, button;
-          switch (status) {
-            case 'completed':
-              icon = <i data-feather="check"></i>;
-              button = <a href={`/morganoboard/repaso?resultadoId=${b.resultadoId}`} className="morganoboard-btn btn-secondary">Repasar</a>;
-              break;
-            case 'unlocked':
-              icon = <i data-feather="play"></i>;
-              button = <a href={`/quizbanqueo?banqueoId=${b.banqueoID}&tiempoSegundos=${b.tiempoSegundos}`} className="morganoboard-btn">Iniciar</a>;
-              break;
-            default:
-              icon = <i data-feather="lock"></i>;
-              button = <a href="/precios" className="morganoboard-btn" style={{ background: 'var(--acento-violeta)' }}>Mejorar Plan</a>;
-              break;
-          }
-          return (
-            <div key={b.banqueoID} className={`timeline-item timeline-item--${status}`}>
-              <div className="timeline-connector"></div>
-              <div className="timeline-icon">{icon}</div>
-              <div className="timeline-content">
-                <h3 className="timeline-content__title">{b.titulo} {status === 'locked' && `(Plan ${b.planRequerido})`}</h3>
-                <p className="timeline-content__description">Contiene {b.numPreguntas} preguntas...</p>
-                <div className="timeline-button-container">{button}</div>
-              </div>
+      <h1 style={{ marginBottom: '2rem' }}>{category.titulo}</h1>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {banqueos.length > 0 ? banqueos.map((b) => (
+            <div key={b.id} style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                    <h4 style={{ margin: '0 0 0.5rem' }}>{b.titulo}</h4>
+                    <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>{b.preguntas} Preguntas • {b.tiempo} min</p>
+                </div>
+                <button className="morganoboard-btn" style={{ padding: '8px 16px', display:'flex', alignItems:'center', gap:'5px' }}>
+                    <Play size={16}/> Iniciar
+                </button>
             </div>
-          );
-        })
-      )}
+        )) : <p>Próximamente...</p>}
+      </div>
+    </div>
+);
+
+
+// --- PÁGINA PRINCIPAL ---
+export default function BanqueosPage() {
+  const { 
+    loading, areas, categories, banqueos, 
+    selectedArea, selectedCategory, 
+    selectArea, selectCategory, goBack 
+  } = useBanqueos();
+
+  if (loading) return <div style={{padding:'2rem'}}>Cargando...</div>;
+
+  // Lógica de Vistas
+  if (selectedCategory) return <BanqueoList category={selectedCategory} banqueos={banqueos} onBack={goBack} />;
+  if (selectedArea) return <CategorySelection area={selectedArea} categories={categories} onSelectCategory={selectCategory} onBack={goBack} />;
+
+  // VISTA PRINCIPAL (LISTA VERTICAL IDÉNTICA A TU DISEÑO)
+  return (
+    <div className="fade-in">
+        <h1 style={{ marginBottom: '2rem', fontFamily: 'var(--font-titulos)' }}>Banqueos Killer</h1>
+        
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {areas.map((area) => (
+                <AreaListItem 
+                    key={area.id} 
+                    area={area} 
+                    onClick={selectArea} 
+                />
+            ))}
+        </div>
     </div>
   );
-};
-
-// --- PÁGINA PRINCIPAL DE BANQUEOS ---
-export function BanqueosPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [areas, setAreas] = useState([]);
-  const [dataByArea, setDataByArea] = useState({});
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { currentUser } = useAuth();
-
-  useEffect(() => {
-    const loadData = async () => {
-      if (!currentUser) return;
-      setIsLoading(true);
-      setTimeout(() => {
-        setDataByArea(fakeCategoriasData);
-        setAreas(Object.keys(fakeCategoriasData));
-        setIsLoading(false);
-      }, 1000);
-    };
-    loadData();
-  }, [currentUser]);
-
-  // Efecto para recargar los íconos de Feather
-  useEffect(() => {
-    // CORREGIDO: Usamos window.feather
-    if (!isLoading && window.feather) {
-      window.feather.replace();
-    }
-  }, [isLoading, selectedArea, selectedCategory]);
-
-  if (isLoading) {
-    return <AreaSkeleton count={4} />;
-  }
-
-  if (selectedArea && selectedCategory) {
-    return <BanqueoTimelineView category={selectedCategory} onBack={() => setSelectedCategory(null)} />;
-  }
-
-  if (selectedArea) {
-    return <CategorySelectionView areaTitle={selectedArea} categories={dataByArea[selectedArea] || []} onSelectCategory={setSelectedCategory} onBack={() => setSelectedArea(null)} />;
-  }
-
-  return <AreaSelectionView areas={areas} onSelectArea={setSelectedArea} />;
 }

@@ -1,21 +1,35 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Outlet, Navigate, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
-// NO importamos 'feather-icons'
-import '../styles/Dashboard.css';
+// Importamos los íconos como componentes (Más rápido, sin bugs de renderizado)
+import { 
+  Home, 
+  Map, 
+  Target, 
+  Edit3, 
+  BarChart2, 
+  DollarSign, 
+  Bell, 
+  LogOut,
+  Menu // Para el botón móvil si lo necesitas
+} from 'lucide-react';
 
-// --- Lista de items del menú ---
+import '../styles/Dashboard.css';
+import '../styles/GlobalStyles.css';
+
+// --- Configuración de Íconos ---
+// Mapeamos los strings a componentes reales de Lucide
 const menuItems = [
-  { view: 'inicio', icon: 'home', text: 'Inicio' },
-  { view: 'ruta', icon: 'map', text: 'Ruta de Aprendizaje' },
-  { view: 'banqueos', icon: 'target', text: 'Banqueos Killer' },
-  { view: 'simulacros', icon: 'edit-3', text: 'Simulacros' },
-  { view: 'ranking', icon: 'bar-chart-2', text: 'Ranking' },
-  { view: 'afiliados', icon: 'dollar-sign', text: 'Programa de Referidos' },
-  { view: 'notificaciones', icon: 'bell', text: 'Notificaciones' },
+  { view: 'inicio', icon: Home, text: 'Inicio' },
+  { view: 'ruta', icon: Map, text: 'Ruta de Aprendizaje' },
+  { view: 'banqueos', icon: Target, text: 'Banqueos Killer' },
+  { view: 'simulacros', icon: Edit3, text: 'Simulacros' },
+  { view: 'ranking', icon: BarChart2, text: 'Ranking' },
+  { view: 'afiliados', icon: DollarSign, text: 'Programa de Referidos' },
+  { view: 'notificaciones', icon: Bell, text: 'Notificaciones' },
 ];
 
-// --- Componentes Reales (reemplazan tus placeholders) ---
+// --- Componentes ---
 
 const Sidebar = () => (
   <nav className="sidebar" aria-label="Navegación principal">
@@ -31,11 +45,13 @@ const Sidebar = () => (
         <NavLink
           key={item.view}
           to={item.view}
-          className="sidebar-btn"
+          className={({ isActive }) => 
+            `sidebar-btn ${isActive ? 'active' : ''}`
+          }
           end={item.view === 'inicio'}
         >
-          {/* Volvemos a usar 'data-feather' */}
-          <i data-feather={item.icon}></i>
+          {/* Renderizamos el componente del ícono directamente */}
+          <item.icon size={20} />
           <span className="sidebar-text">{item.text}</span>
         </NavLink>
       ))}
@@ -50,10 +66,12 @@ const MobileNav = () => (
         <NavLink
           key={item.view}
           to={item.view}
-          className="sidebar-btn"
+          className={({ isActive }) => 
+            `sidebar-btn ${isActive ? 'active' : ''}`
+          }
           end={item.view === 'inicio'}
         >
-          <i data-feather={item.icon}></i>
+          <item.icon size={20} />
           <span className="sidebar-text">{item.text}</span>
         </NavLink>
       ))}
@@ -75,6 +93,10 @@ const BoardHeader = () => {
     ? currentUser.nombres.charAt(0).toUpperCase()
     : 'M';
 
+  // Obtenemos el título basado en la ruta actual (opcional, lógica simple)
+  // Nota: Para títulos dinámicos perfectos, se suele usar un contexto o custom hook,
+  // pero por ahora "Bienvenido" funciona como base.
+  
   return (
     <header className="board-header">
       <div className="header-title-container">
@@ -88,42 +110,30 @@ const BoardHeader = () => {
           {userInitial}
         </div>
         <span
-          id="morganoboard-logout-button"
           className="logout-icon"
           title="Cerrar Sesión"
           onClick={handleLogout}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
-          <i data-feather="log-out"></i>
+          <LogOut size={20} />
         </span>
       </div>
     </header>
   );
 };
 
-// --- Layout Principal (Tu componente original, ahora con 'useEffect') ---
+// --- Layout Principal ---
 
 export function DashboardLayout() {
   const { currentUser, loading } = useAuth();
 
-  // Este useEffect llama a 'feather.replace()' cuando el layout se carga.
-  useEffect(() => {
-    if (window.feather) {
-      window.feather.replace();
-    }
-    // Lo ejecutamos cada vez que el usuario (y por ende el layout) carga
-  }, [loading, currentUser]);
+  // ✅ YA NO NECESITAMOS useEffect PARA LOS ÍCONOS
+  // Lucide-React se encarga de renderizarlos como SVGs nativos.
 
   if (loading) {
     return (
-      <div
-        style={{
-          textAlign: 'center',
-          padding: '5rem',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        Cargando sesión...
+      <div className="loading-container" style={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
+        <div className="skeleton-circle" style={{ width: 50, height: 50 }}></div>
       </div>
     );
   }
@@ -133,7 +143,7 @@ export function DashboardLayout() {
   }
 
   return (
-    <div id="page-wrapper" className="page-wrapper">
+    <div className="page-wrapper">
       <Sidebar />
       <MobileNav />
 
@@ -146,3 +156,5 @@ export function DashboardLayout() {
     </div>
   );
 }
+
+export default DashboardLayout;

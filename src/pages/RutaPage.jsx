@@ -1,11 +1,10 @@
 import React from 'react';
-// 1. Importamos el hook que creamos (asegúrate de haber creado el archivo en hooks/)
+import { useNavigate } from 'react-router-dom'; // 1. Importamos useNavigate
 import { useLearningPath } from '../hooks/useLearningPath';
-// 2. Importamos iconos modernos de Lucide (reemplaza a feather)
 import { Layers, ArrowLeft, CheckCircle, PlayCircle, Lock } from 'lucide-react';
 import '../styles/Dashboard.css';
 
-// --- COMPONENTE DE SKELETON (Lo mantenemos igual, se ve bien) ---
+// --- COMPONENTE DE SKELETON (Carga) ---
 const AreaSkeleton = ({ count = 3 }) => (
   <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
     {Array.from({ length: count }, (_, i) => (
@@ -20,11 +19,12 @@ const AreaSkeleton = ({ count = 3 }) => (
   </div>
 );
 
-// --- COMPONENTE DE ITEM DE TIMELINE ---
+// --- COMPONENTE DE ITEM DE TIMELINE (Lección individual) ---
 const TimelineItem = ({ lesson }) => {
   const { status, titulo, descripcion, cursoId } = lesson;
-  
-  // Lógica de iconos y botones actualizada a React + Lucide
+  const navigate = useNavigate(); // 2. Hook para navegar sin recargar
+
+  // Lógica de iconos y botones
   let icon, button;
 
   switch (status) {
@@ -32,7 +32,7 @@ const TimelineItem = ({ lesson }) => {
       icon = <CheckCircle size={20} />;
       button = (
         <button 
-          onClick={() => window.location.href = `/cursosmg/?cursoId=${cursoId}`} 
+          onClick={() => navigate(`/cursosmg/?cursoId=${cursoId}`)} // Navegación SPA
           className="morganoboard-btn btn-secondary"
         >
           Repasar Clase
@@ -43,7 +43,7 @@ const TimelineItem = ({ lesson }) => {
       icon = <PlayCircle size={20} />;
       button = (
         <button 
-          onClick={() => window.location.href = `/cursosmg/?cursoId=${cursoId}`} 
+          onClick={() => navigate(`/cursosmg/?cursoId=${cursoId}`)} // Navegación SPA
           className="morganoboard-btn"
         >
           Empezar Lección
@@ -54,7 +54,7 @@ const TimelineItem = ({ lesson }) => {
       icon = <Lock size={20} />;
       button = (
         <button 
-          onClick={() => window.open('https://morganomedic.com/serums/#precios', '_blank')}
+          onClick={() => window.open('https://morganomedic.com/serums/#precios', '_blank')} // Enlace externo OK
           className="morganoboard-btn" 
           style={{ background: 'var(--acento-violeta)' }}
         >
@@ -67,7 +67,6 @@ const TimelineItem = ({ lesson }) => {
     <div className={`timeline-item timeline-item--${status}`}>
       <div className="timeline-connector"></div>
       <div className="timeline-icon">
-        {/* Renderizamos el icono directamente */}
         {icon}
       </div>
       <div className="timeline-content">
@@ -79,9 +78,9 @@ const TimelineItem = ({ lesson }) => {
   );
 };
 
-// --- VISTA DE LÍNEA DE TIEMPO ---
+// --- VISTA DE LÍNEA DE TIEMPO (Detalle del Área) ---
 const LearningPathTimelineView = ({ areaTitle, lessons, onBack }) => (
-  <div id="ruta-learning-path">
+  <div id="ruta-learning-path" className="fade-in">
     <button className="back-button" onClick={onBack}>
       <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Volver a Áreas
     </button>
@@ -99,12 +98,12 @@ const LearningPathTimelineView = ({ areaTitle, lessons, onBack }) => (
   </div>
 );
 
-// --- VISTA DE SELECCIÓN DE ÁREAS ---
+// --- VISTA DE SELECCIÓN DE ÁREAS (Lista Principal) ---
 const AreaSelectionView = ({ areas, cursosPorArea, onSelectArea }) => (
-  <div id="ruta-area-selection" className="dashboard-grid">
+  <div id="ruta-area-selection" className="dashboard-grid fade-in">
     {areas.map((area) => {
-      // Verificamos si el área tiene cursos antes de mostrarla
-      if (cursosPorArea[area.nombre] && cursosPorArea[area.nombre].length > 0) {
+      // 3. Optional Chaining (?.) para evitar crasheos si la data no llegó bien
+      if (cursosPorArea?.[area.nombre]?.length > 0) {
         return (
           <div 
             key={area.nombre} 
@@ -129,8 +128,6 @@ const AreaSelectionView = ({ areas, cursosPorArea, onSelectArea }) => (
 
 // --- PÁGINA PRINCIPAL DE LA RUTA ---
 export default function RutaPage() {
-  // 3. Usamos el hook personalizado para toda la lógica y estado
-  // Esto reemplaza tu useState manual, useEffect y setTimeout
   const { 
     loading, 
     error, 
@@ -140,8 +137,6 @@ export default function RutaPage() {
     selectArea, 
     goBack 
   } = useLearningPath();
-
-  // Renderizado condicional basado en el estado del Hook
 
   if (loading) {
     return <AreaSkeleton count={4} />;
@@ -157,9 +152,9 @@ export default function RutaPage() {
     );
   }
 
-  // Si hay un área seleccionada, mostramos el Timeline
   if (selectedArea) {
-    const lessons = courses[selectedArea] || [];
+    // 4. Seguridad extra: array vacío por defecto
+    const lessons = courses?.[selectedArea] || [];
     return (
       <LearningPathTimelineView
         areaTitle={selectedArea}
@@ -169,7 +164,6 @@ export default function RutaPage() {
     );
   }
 
-  // Si no, mostramos la selección de áreas
   return (
     <AreaSelectionView
       areas={areas}
